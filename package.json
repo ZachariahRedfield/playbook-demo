@@ -12,6 +12,7 @@
   ],
   "scripts": {
     "build": "mkdir -p dist && cp src/cli.js dist/cli.js",
+    "prepare": "pnpm -w build || npm run build",
     "prepack": "npm run build",
     "verify:pack-bin": "npm pack --dry-run | tee .npm-pack-dry-run.txt && rg 'dist/cli.js' .npm-pack-dry-run.txt",
     "analyze": "npx --yes @zachariahredfield/playbook@latest analyze",

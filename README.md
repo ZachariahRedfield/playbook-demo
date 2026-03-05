@@ -6,19 +6,20 @@ A tiny repository that demonstrates Playbook analysis in under 30 seconds.
 
 Requires only Node.js.
 
-> Why scoped package commands? The unscoped `playbook` package name on npm is already owned by another project, so this demo must invoke `@zachariahredfield/playbook` explicitly.
+> Demo note: this repo currently installs Playbook from GitHub because the npm package is not published yet. Once published, switch these commands to scoped `npx --yes @zachariahredfield/playbook@latest ...`.
 
 ```bash
-npx --yes @zachariahredfield/playbook@latest analyze
-npx --yes @zachariahredfield/playbook@latest verify --ci
-npx --yes @zachariahredfield/playbook@latest analyze --ci
-npx --yes @zachariahredfield/playbook@latest analyze --json
+npm i --no-save github:ZachariahRedfield/playbook#main
+npx playbook analyze
+npx playbook verify --ci
+npx playbook analyze --ci
+npx playbook analyze --json
 ```
 
 ## Example output
 
 ```text
-$ npx --yes @zachariahredfield/playbook@latest analyze
+$ npx playbook analyze
 ✓ Scanned 3 files
 ✓ Found 0 critical issues
 ✓ Report ready
@@ -30,5 +31,5 @@ This repo includes a GitHub Actions workflow at `.github/workflows/playbook.yml`
 
 ```yaml
 - name: Playbook verify
-  run: npx --yes @zachariahredfield/playbook@latest verify --ci
+  run: npx playbook verify --ci
 ```

@@ -24,3 +24,14 @@ $ npx playbook analyze
 ## CI example
 
 This repo includes a GitHub Actions workflow at `.github/workflows/playbook.yml` that runs Playbook verify on pull requests and pushes to `main`.
+
+It uses the reusable action directly:
+
+```yaml
+- name: Playbook verify
+  uses: ZachariahRedfield/playbook/actions/verify@main
+  with:
+    playbook_version: latest
+    node_version: '22'
+    args: --ci
+```

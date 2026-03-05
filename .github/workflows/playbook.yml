@@ -18,14 +18,22 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Clear npm auth for public GitHub install
+        run: |
+          rm -f ~/.npmrc
+          npm config delete //registry.npmjs.org/:_authToken || true
+
+      - name: Install Playbook CLI from GitHub
+        run: npm i --no-save github:ZachariahRedfield/playbook#main
+
       - name: Playbook verify in CI mode
-        run: npx --yes @zachariahredfield/playbook@latest verify --ci
+        run: npx playbook verify --ci
 
       - name: Run Playbook analyze in CI mode
-        run: npx --yes @zachariahredfield/playbook@latest analyze --ci
+        run: npx playbook analyze --ci
 
       - name: Generate Playbook JSON report
-        run: npx --yes @zachariahredfield/playbook@latest analyze --json > playbook-report.json
+        run: npx playbook analyze --json > playbook-report.json
 
       - name: Validate package tarball contains CLI bin target
         run: npm run verify:pack-bin

@@ -1,0 +1,34 @@
+name: Playbook
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Playbook verify
+        uses: <OWNER>/playbook/actions/verify@<ref>
+
+      - name: Run Playbook analyze in CI mode
+        run: npx playbook analyze --ci
+
+      - name: Generate Playbook JSON report
+        run: npx playbook analyze --json > playbook-report.json
+
+      - name: Upload Playbook report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: playbook-report
+          path: playbook-report.json

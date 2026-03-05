@@ -1,0 +1,12 @@
+{
+  "name": "playbook-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tiny demo repo for Playbook analyze + CI",
+  "scripts": {
+    "analyze": "playbook analyze",
+    "analyze:ci": "playbook analyze --ci",
+    "analyze:json": "playbook analyze --json"
+  },
+  "type": "module"
+}

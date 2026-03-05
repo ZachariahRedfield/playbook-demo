@@ -28,6 +28,11 @@ switch (command) {
     break;
   }
   default:
-    console.log('Usage: playbook <analyze|verify> [--ci] [--json]');
-    process.exit(command ? 1 : 0);
+    if (!command) {
+      console.log('Usage: playbook <analyze|verify|init> [--ci] [--json]');
+      process.exit(0);
+    }
+    console.error(`Unknown command: ${command}`);
+    console.log('Available commands: analyze, verify, init');
+    process.exit(1);
 }

@@ -1,12 +1,22 @@
 {
-  "name": "playbook-demo",
+  "name": "@zachariahredfield/playbook",
   "version": "1.0.0",
-  "private": true,
   "description": "Tiny demo repo for Playbook analyze + CI",
-  "scripts": {
-    "analyze": "playbook analyze",
-    "analyze:ci": "playbook analyze --ci",
-    "analyze:json": "playbook analyze --json"
+  "type": "module",
+  "bin": {
+    "playbook": "./dist/cli.js"
   },
-  "type": "module"
+  "files": [
+    "dist/**",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "mkdir -p dist && cp src/cli.js dist/cli.js",
+    "prepack": "npm run build",
+    "verify:pack-bin": "npm pack --dry-run | tee .npm-pack-dry-run.txt && rg 'dist/cli.js' .npm-pack-dry-run.txt",
+    "analyze": "npx --yes @zachariahredfield/playbook@latest analyze",
+    "analyze:ci": "npx --yes @zachariahredfield/playbook@latest analyze --ci",
+    "analyze:json": "npx --yes @zachariahredfield/playbook@latest analyze --json",
+    "verify:ci": "npx --yes @zachariahredfield/playbook@latest verify --ci"
+  }
 }

@@ -18,18 +18,17 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Playbook verify
-        uses: ZachariahRedfield/playbook/actions/verify@main
-        with:
-          playbook_version: latest
-          node_version: '22'
-          args: --ci
+      - name: Playbook verify in CI mode
+        run: npx --yes @zachariahredfield/playbook@latest verify --ci
 
       - name: Run Playbook analyze in CI mode
-        run: npx playbook analyze --ci
+        run: npx --yes @zachariahredfield/playbook@latest analyze --ci
 
       - name: Generate Playbook JSON report
-        run: npx playbook analyze --json > playbook-report.json
+        run: npx --yes @zachariahredfield/playbook@latest analyze --json > playbook-report.json
+
+      - name: Validate package tarball contains CLI bin target
+        run: npm run verify:pack-bin
 
       - name: Upload Playbook report artifact
         uses: actions/upload-artifact@v4

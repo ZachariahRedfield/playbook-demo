@@ -16,10 +16,14 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Playbook verify
-        uses: <OWNER>/playbook/actions/verify@<ref>
+        uses: ZachariahRedfield/playbook/actions/verify@main
+        with:
+          playbook_version: latest
+          node_version: '22'
+          args: --ci
 
       - name: Run Playbook analyze in CI mode
         run: npx playbook analyze --ci

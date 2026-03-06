@@ -4,13 +4,15 @@ This repository intentionally starts with 5 findings so users can experience the
 
 `status` → `explain` → `fix` → `verify`
 
-A first `verify` (including `verify --ci`) is expected to fail before fixes are applied.
+A first `verify` is expected to fail before fixes are applied.
+
+`analyze` is intentionally separate: it reports repository structure, while `status`/`verify` report rule health.
 
 ## Finding Map
 
 ### PB001 — Documentation drift in architecture docs
 
-- **Scenario:** `docs/ARCHITECTURE.md` omits the users feature even though it exists in `src/features/users`.
+- **Scenario:** `docs/ARCHITECTURE.md` has a `## Features` section but omits `users` even though `src/features/users` exists.
 - **Purpose:** Demonstrates that architecture docs should reflect real repository structure.
 - **Why high-signal:** Missing feature documentation creates onboarding and ownership confusion.
 
@@ -38,7 +40,7 @@ A first `verify` (including `verify --ci`) is expected to fail before fixes are 
 - **Purpose:** Demonstrates lightweight operational metadata in project notes.
 - **Why high-signal:** Without a verification marker, note freshness is ambiguous.
 
-## Command Sequence Used in Every Scenario
+## Command Sequence Used in Every Guided Run
 
 1. `npx playbook status`
 2. `npx playbook explain`

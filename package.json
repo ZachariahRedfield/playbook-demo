@@ -13,7 +13,7 @@
     ".playbook/**"
   ],
   "scripts": {
-    "build": "mkdir -p dist && cp src/cli.js dist/cli.js && chmod +x dist/cli.js",
+    "build": "node scripts/build.mjs",
     "prepare": "npm run build",
     "status": "node dist/cli.js status",
     "explain": "node dist/cli.js explain",

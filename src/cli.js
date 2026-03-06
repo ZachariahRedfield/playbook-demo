@@ -127,10 +127,20 @@ function runStatus() {
     findings.forEach((finding) => {
       console.log(`- [${finding.id}] (${finding.severity}) ${finding.title}`);
     });
-    console.log('\nRecommended next commands:');
-    console.log('  npx playbook explain');
-    console.log('  npx playbook fix');
-    console.log('  npx playbook verify');
+
+    console.log('\nNext steps');
+    console.log('────────────────────────────────');
+    console.log('');
+    console.log('1. Understand the findings');
+    console.log('   npx playbook explain');
+    console.log('');
+    console.log('2. Apply safe automated fixes');
+    console.log('   npx playbook fix');
+    console.log('');
+    console.log('3. Verify the repository is healthy');
+    console.log('   npx playbook verify');
+    console.log('');
+    console.log('Tip: run `npx playbook fix` to repair most issues automatically.');
   } else {
     console.log('\nNo issues found. Repository health is strong.');
     console.log('Recommended next command: npx playbook verify');

@@ -1,8 +1,10 @@
 # Playbook Demo Repository
 
-A small repository intentionally containing a few project-health issues so you can see Playbook detect, explain, fix, and verify them in under 30 seconds.
+A deliberately small repository with **intentional, safe findings** so you can experience the full Playbook discipline in under 30 seconds.
 
-## Quick Start
+## First-Run Workflow (recommended)
+
+Run these commands in order:
 
 ```bash
 npm install
@@ -12,13 +14,30 @@ npx playbook fix
 npx playbook verify
 ```
 
-## What You Will See
+CI-style check before fixes (expected to fail in the initial state):
 
-- repository health summary
-- rule violations
-- explanations
-- safe fixes
-- successful verification
+```bash
+npx playbook verify --ci
+```
+
+## Expected Initial State
+
+On a fresh clone, the demo should report exactly **5 findings**. This is intentional and part of the guided-imperfection narrative.
+
+- `[PB001]` Documentation drift in architecture docs
+- `[PB002]` Missing changelog entry for users feature
+- `[PB003]` Checklist drift: verify step is missing
+- `[PB004]` Structural inconsistency in workout type naming
+- `[PB005]` Missing expected notes artifact marker
+
+After `npx playbook fix`, `npx playbook verify` should pass.
+
+## What This Demonstrates
+
+- **status**: detect repository discipline gaps quickly
+- **explain**: understand why each finding matters
+- **fix**: apply safe, scoped remediations
+- **verify**: confirm the repo is healthy end-to-end
 
 Optional deeper exploration:
 
@@ -29,23 +48,9 @@ npx playbook analyze
 
 ## Demo Narrative (30 seconds)
 
-1. `status` immediately reports the repository health and shows 3–5 realistic issues.
-2. `explain` tells you why each issue matters and what Playbook will change.
-3. `fix` safely applies small corrections to docs and source structure.
-4. `verify` confirms the repo is healthy after fixes.
+1. `status` reports repository health and surfaces the 5 expected findings.
+2. `explain` clarifies each finding's purpose in team workflow discipline.
+3. `fix` applies only small, safe updates to docs and source naming.
+4. `verify` confirms the discipline loop is complete.
 
-This repo doubles as:
-
-- a product demo,
-- living documentation,
-- and a self-hosted example of Playbook maintaining a repository.
-
-## Intentional Starting Issues
-
-1. Documentation drift in `docs/ARCHITECTURE.md`.
-2. Missing changelog entry in `docs/CHANGELOG.md`.
-3. Checklist drift in `docs/PLAYBOOK_CHECKLIST.md`.
-4. Structural inconsistency in workout type naming.
-5. Missing expected artifact marker in `docs/PLAYBOOK_NOTES.md`.
-
-See `.playbook/demo-scenarios.md` for details and command mapping.
+See `.playbook/demo-scenarios.md` for a finding-by-finding scenario map.

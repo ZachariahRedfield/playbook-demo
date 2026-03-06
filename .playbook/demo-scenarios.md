@@ -1,56 +1,46 @@
 # Playbook Demo Scenarios
 
-Scenario 1 — Documentation Drift
+This repository intentionally starts with 5 findings so users can experience the full flow:
 
-`docs/ARCHITECTURE.md` is slightly out of sync with `src/features` and omits the users feature.
+`status` → `explain` → `fix` → `verify`
 
-Commands demonstrated:
+A first `verify` (including `verify --ci`) is expected to fail before fixes are applied.
 
-- `npx playbook status`
-- `npx playbook explain`
-- `npx playbook fix`
-- `npx playbook verify`
+## Finding Map
 
-Scenario 2 — Missing Changelog Entry
+### PB001 — Documentation drift in architecture docs
 
-`docs/CHANGELOG.md` does not include a note for the user profile service.
+- **Scenario:** `docs/ARCHITECTURE.md` omits the users feature even though it exists in `src/features/users`.
+- **Purpose:** Demonstrates that architecture docs should reflect real repository structure.
+- **Why high-signal:** Missing feature documentation creates onboarding and ownership confusion.
 
-Commands demonstrated:
+### PB002 — Missing changelog entry for users feature
 
-- `npx playbook status`
-- `npx playbook explain`
-- `npx playbook fix`
-- `npx playbook verify`
+- **Scenario:** `docs/CHANGELOG.md` has no entry for user profile retrieval support.
+- **Purpose:** Demonstrates release-traceability discipline.
+- **Why high-signal:** If features are not logged, teams lose deployment context quickly.
 
-Scenario 3 — Checklist Drift
+### PB003 — Checklist drift: verify step is missing
 
-`docs/PLAYBOOK_CHECKLIST.md` is missing the Verify section.
+- **Scenario:** `docs/PLAYBOOK_CHECKLIST.md` stops at Fix and omits Verify.
+- **Purpose:** Reinforces the full quality loop as process, not just detection.
+- **Why high-signal:** A missing verify step normalizes unfinished work.
 
-Commands demonstrated:
+### PB004 — Structural inconsistency in workout type naming
 
-- `npx playbook status`
-- `npx playbook explain`
-- `npx playbook fix`
-- `npx playbook verify`
+- **Scenario:** `src/features/workouts/workout-types.ts` exports `Workout` while this demo's naming convention expects `WorkoutPlan` for feature domain types consumed by services.
+- **Purpose:** Demonstrates a concrete structural convention that keeps feature APIs predictable.
+- **Why high-signal:** Inconsistent type names increase cognitive load and make rule-based maintenance harder.
 
-Scenario 4 — Structural Inconsistency
+### PB005 — Missing expected notes artifact marker
 
-`src/features/workouts/workout-types.ts` exports `Workout` instead of the expected `WorkoutPlan` type.
+- **Scenario:** `docs/PLAYBOOK_NOTES.md` lacks a `Last Verified:` marker.
+- **Purpose:** Demonstrates lightweight operational metadata in project notes.
+- **Why high-signal:** Without a verification marker, note freshness is ambiguous.
 
-Commands demonstrated:
+## Command Sequence Used in Every Scenario
 
-- `npx playbook status`
-- `npx playbook explain`
-- `npx playbook fix`
-- `npx playbook verify`
-
-Scenario 5 — Missing Expected Artifact
-
-`docs/PLAYBOOK_NOTES.md` is missing a `Last Verified:` marker.
-
-Commands demonstrated:
-
-- `npx playbook status`
-- `npx playbook explain`
-- `npx playbook fix`
-- `npx playbook verify`
+1. `npx playbook status`
+2. `npx playbook explain`
+3. `npx playbook fix`
+4. `npx playbook verify`

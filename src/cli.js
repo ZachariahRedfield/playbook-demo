@@ -72,7 +72,7 @@ const RULES = [
       return text.includes('export type WorkoutPlan');
     },
     explain:
-      'The expected domain type is WorkoutPlan. Consistent naming improves repository readability and rule clarity.',
+      'In this demo, workout services use WorkoutPlan as the canonical exported domain type. Consistent type naming keeps feature contracts predictable.',
     fix: () => {
       const typePath = 'src/features/workouts/workout-types.ts';
       const servicePath = 'src/features/workouts/workout-service.ts';
@@ -117,6 +117,7 @@ function runStatus() {
   const health = findings.length === 0 ? 'healthy' : 'attention-needed';
 
   console.log('Playbook Repository Status');
+  console.log('Note: this demo intentionally starts with a few findings.');
   console.log(`Health: ${health}`);
   console.log(`Detected issues: ${findings.length}`);
   console.log(`Rules evaluated: ${RULES.length}`);

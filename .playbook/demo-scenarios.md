@@ -1,12 +1,12 @@
 # Playbook Demo Scenarios
 
-This repository intentionally starts with 5 findings so users can experience the full flow:
+This repository intentionally starts with 5 findings so users can experience the discipline flow:
 
 `status` → `explain` → `fix` → `verify`
 
 A first `verify` is expected to fail before fixes are applied.
 
-`analyze` is intentionally separate: it reports repository structure, while `status`/`verify` report rule health.
+`analyze` is intentionally separate from that flow: it reports repository structure, while `status`/`verify` report rule discipline health.
 
 ## Finding Map
 
@@ -46,3 +46,7 @@ A first `verify` is expected to fail before fixes are applied.
 2. `npx playbook explain`
 3. `npx playbook fix`
 4. `npx playbook verify`
+
+## Maintainer Alignment Note
+
+When Playbook command terminology or product framing changes in the main project, revalidate this demo's `README`, this scenario map, and command wording in CLI output so structure (`analyze`) versus discipline (`status`/`verify`) stays explicit and consistent.

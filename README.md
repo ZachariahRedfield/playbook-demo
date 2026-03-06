@@ -1,35 +1,51 @@
-# playbook-demo
+# Playbook Demo Repository
 
-A tiny repository that demonstrates Playbook analysis in under 30 seconds.
+A small repository intentionally containing a few project-health issues so you can see Playbook detect, explain, fix, and verify them in under 30 seconds.
 
-## Quickstart
-
-Requires only Node.js.
-
-> Demo note: this repo currently installs Playbook from GitHub because the npm package is not published yet. Once published, switch these commands to scoped `npx --yes @zachariahredfield/playbook@latest ...`.
+## Quick Start
 
 ```bash
-npm i --no-save github:ZachariahRedfield/playbook#main
+npm install
+npx playbook status
+npx playbook explain
+npx playbook fix
+npx playbook verify
+```
+
+## What You Will See
+
+- repository health summary
+- rule violations
+- explanations
+- safe fixes
+- successful verification
+
+Optional deeper exploration:
+
+```bash
+npx playbook rules --explain
 npx playbook analyze
-npx playbook verify --ci
-npx playbook analyze --ci
-npx playbook analyze --json
 ```
 
-## Example output
+## Demo Narrative (30 seconds)
 
-```text
-$ npx playbook analyze
-✓ Scanned 3 files
-✓ Found 0 critical issues
-✓ Report ready
-```
+1. `status` immediately reports the repository health and shows 3–5 realistic issues.
+2. `explain` tells you why each issue matters and what Playbook will change.
+3. `fix` safely applies small corrections to docs and source structure.
+4. `verify` confirms the repo is healthy after fixes.
 
-## CI example
+This repo doubles as:
 
-This repo includes a GitHub Actions workflow at `.github/workflows/playbook.yml` that runs Playbook commands on pull requests and pushes to `main`.
+- a product demo,
+- living documentation,
+- and a self-hosted example of Playbook maintaining a repository.
 
-```yaml
-- name: Playbook verify
-  run: npx playbook verify --ci
-```
+## Intentional Starting Issues
+
+1. Documentation drift in `docs/ARCHITECTURE.md`.
+2. Missing changelog entry in `docs/CHANGELOG.md`.
+3. Checklist drift in `docs/PLAYBOOK_CHECKLIST.md`.
+4. Structural inconsistency in workout type naming.
+5. Missing expected artifact marker in `docs/PLAYBOOK_NOTES.md`.
+
+See `.playbook/demo-scenarios.md` for details and command mapping.

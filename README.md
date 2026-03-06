@@ -19,6 +19,20 @@ Expected behavior:
 - The first `verify` fails (findings still exist).
 - After `fix`, `verify` passes.
 
+## What Playbook Looks Like
+
+Before fix:
+
+❌ PB001 Documentation drift  
+❌ PB002 Missing changelog entry  
+❌ PB003 Checklist drift  
+❌ PB004 Structural naming issue  
+❌ PB005 Missing notes marker
+
+After fix:
+
+✅ Repository discipline verified  
+
 ## Command Model (What each command means)
 
 - `npx playbook analyze` — **repository shape**: features, docs, scenario presence, and guided command model.

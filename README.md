@@ -67,6 +67,17 @@ npx playbook explain
 
 Use this pass to compare structure awareness (`analyze`) versus discipline enforcement (`status`/`verify`).
 
+## Demo Repository Structure
+
+This repository simulates a small product repository with:
+
+- documentation
+- feature changes
+- governance checklists
+- architecture notes
+
+Playbook enforces discipline across these artifacts.
+
 ## Scenario Reference
 
 See `.playbook/demo-scenarios.md` for a finding-by-finding scenario map and maintainer alignment note.

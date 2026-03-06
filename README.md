@@ -8,7 +8,7 @@ Run this exact sequence on a fresh clone:
 
 ```bash
 npm install
-npx playbook status
+npx playbook analyze
 npx playbook verify
 npx playbook explain
 npx playbook fix
@@ -77,6 +77,48 @@ This repository simulates a small product repository with:
 - architecture notes
 
 Playbook enforces discipline across these artifacts.
+
+## Why the Demo Contains Findings
+
+This repository intentionally contains a small number of realistic
+repository discipline issues.
+
+These simulate common problems that appear as repositories evolve:
+
+- documentation drift
+- missing changelog entries
+- checklist omissions
+- naming inconsistencies
+- missing governance artifacts
+
+Playbook detects and safely remediates these issues.
+
+## Maintainer Note
+
+This repository must remain deterministic.
+
+The initial state should always contain exactly five findings:
+
+PB001
+PB002
+PB003
+PB004
+PB005
+
+If rules change in Playbook, this demo must be updated so the
+guided run remains stable.
+
+## What This Demonstrates
+
+Playbook is built around a simple principle:
+
+Repositories should evolve with discipline.
+
+Instead of relying on manual review or tribal knowledge,
+Playbook makes repository health **verifiable, explainable,
+and fixable**.
+
+The demo shows that workflow end-to-end.
 
 ## Scenario Reference
 

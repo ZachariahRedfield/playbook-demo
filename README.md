@@ -2,7 +2,7 @@
 
 A deliberately small repository with **intentional, safe findings** so you can experience the full Playbook discipline in under 30 seconds.
 
-## First-Run Workflow (recommended)
+## 30-Second Guided Workflow
 
 Run these commands in order:
 
@@ -14,15 +14,19 @@ npx playbook fix
 npx playbook verify
 ```
 
-CI-style check before fixes (expected to fail in the initial state):
+> The first `verify` before `fix` is expected to fail in this demo.
 
-```bash
-npx playbook verify --ci
-```
+## Supported Demo Commands
+
+- `npx playbook status` — issue-oriented health summary and active findings.
+- `npx playbook analyze` — structure-oriented repository profile (features, docs, scenarios, command flow).
+- `npx playbook explain` — why each active finding matters.
+- `npx playbook fix` — apply safe remediations for active findings.
+- `npx playbook verify` — exit nonzero while findings remain; pass when clean.
 
 ## Expected Initial State
 
-On a fresh clone, the demo should report exactly **5 findings**. This is intentional and part of the guided-imperfection narrative.
+On a fresh clone, the demo reports exactly **5 findings**. This is intentional and part of the guided-imperfection narrative.
 
 - `[PB001]` Documentation drift in architecture docs
 - `[PB002]` Missing changelog entry for users feature
@@ -32,21 +36,14 @@ On a fresh clone, the demo should report exactly **5 findings**. This is intenti
 
 After `npx playbook fix`, `npx playbook verify` should pass.
 
-## What This Demonstrates
+## Why `analyze` and `status` are different
 
-- **status**: detect repository discipline gaps quickly
-- **explain**: understand why each finding matters
-- **fix**: apply safe, scoped remediations
-- **verify**: confirm the repo is healthy end-to-end
+- `analyze` answers: **what shape is this repository?**
+- `status` answers: **what discipline rules are currently failing?**
 
-Optional deeper exploration:
+Keeping these concepts separate mirrors Playbook's product architecture: structure understanding is distinct from rule verification.
 
-```bash
-npx playbook rules --explain
-npx playbook analyze
-```
-
-## Demo Narrative (30 seconds)
+## Demo Narrative
 
 1. `status` reports repository health and surfaces the 5 expected findings.
 2. `explain` clarifies each finding's purpose in team workflow discipline.

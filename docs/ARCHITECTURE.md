@@ -8,7 +8,12 @@ It is also intentionally initialized with a few safe discipline gaps for demo pu
 
 - `src/app/index.ts` boots the tiny demo workflow.
 - `src/features/workouts/*` contains workout domain logic.
+- `src/features/users/*` contains user profile logic.
 - `src/shared/utils.ts` contains cross-cutting helpers.
+
+## Features
+
+- workouts
 
 ## Structural conventions used by the demo
 

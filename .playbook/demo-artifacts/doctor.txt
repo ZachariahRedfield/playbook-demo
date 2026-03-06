@@ -1,0 +1,6 @@
+Playbook Doctor
+
+✅ docs directory present
+✅ src/features directory present
+✅ demo scenario map present
+✅ rules loaded

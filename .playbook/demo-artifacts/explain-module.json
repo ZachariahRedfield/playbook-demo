@@ -1,0 +1,9 @@
+{
+  "target": "workouts",
+  "kind": "module",
+  "path": "src/features/workouts",
+  "files": [
+    "workout-service.ts",
+    "workout-types.ts"
+  ]
+}

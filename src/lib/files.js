@@ -36,3 +36,20 @@ export function listMarkdownBasenames(rootPath) {
     .map((name) => path.basename(name, '.md'))
     .sort();
 }
+
+export function listFiles(rootPath) {
+  if (!pathExists(rootPath)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(rootPath, { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .sort();
+}
+
+export function writeJsonFile(filePath, data) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`);
+}

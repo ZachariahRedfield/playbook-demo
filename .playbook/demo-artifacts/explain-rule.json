@@ -1,0 +1,7 @@
+{
+  "target": "PB001",
+  "kind": "rule",
+  "title": "Documentation drift in architecture docs",
+  "severity": "medium",
+  "explain": "ARCHITECTURE.md should list both workouts and users in its Features section so docs match the current repository structure."
+}

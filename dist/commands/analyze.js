@@ -6,7 +6,7 @@ export function runAnalyze() {
   const featureFolders = listDirectories('src/features');
   const docFiles = listMarkdownBasenames('docs');
   const scenariosPresent = pathExists('.playbook/demo-scenarios.md');
-  const commands = ['analyze', 'verify', 'plan', 'apply', 'doctor', 'diagram', 'rules'];
+  const commands = ['index', 'explain', 'rules', 'verify', 'plan', 'apply', 'diagram', 'doctor'];
 
   console.log('Playbook Repository Analysis');
   console.log('Focus: repository structure and demo shape.\n');
@@ -20,7 +20,7 @@ export function runAnalyze() {
   console.log('\nRepository profile');
   console.log('──────────────────');
   console.log(`- Purpose: intentionally imperfect demo repo with deterministic fixes`);
-  console.log(`- Command model: verify/plan/apply for discipline, analyze for structure`);
+  console.log(`- Command model: index/explain for intelligence, verify/plan/apply for remediation`);
   console.log(`- Docs-to-code alignment target: docs should describe src/features shape`);
 
   printNextSteps([

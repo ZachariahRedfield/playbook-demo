@@ -1,8 +1,27 @@
 import { collectFindings } from '../engine/collect-findings.js';
 import { printNextSteps } from '../lib/output.js';
 
-export function runVerify() {
+export function runVerify({ json = false } = {}) {
   const findings = collectFindings();
+
+  if (json) {
+    const payload = {
+      ok: findings.length === 0,
+      findings: findings.map((finding) => ({
+        id: finding.id,
+        severity: finding.severity,
+        title: finding.title,
+        explain: finding.explain
+      }))
+    };
+
+    console.log(JSON.stringify(payload, null, 2));
+    if (!payload.ok) {
+      process.exit(1);
+    }
+    return;
+  }
+
   if (findings.length > 0) {
     console.error(`Verification failed. Remaining issues: ${findings.length}`);
     findings.forEach((finding) => {

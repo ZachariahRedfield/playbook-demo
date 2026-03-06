@@ -1,8 +1,30 @@
 import { collectFindings } from '../engine/collect-findings.js';
 import { printNextSteps } from '../lib/output.js';
 
-export function runApply() {
+export function runApply({ json = false } = {}) {
   const findings = collectFindings();
+
+  if (json) {
+    const applied = findings.map((finding) => ({
+      id: finding.id,
+      title: finding.title
+    }));
+
+    findings.forEach((finding) => finding.fix());
+
+    console.log(
+      JSON.stringify(
+        {
+          appliedCount: applied.length,
+          applied
+        },
+        null,
+        2
+      )
+    );
+    return;
+  }
+
   if (findings.length === 0) {
     console.log('No changes applied. Repository is already clean.');
     return;

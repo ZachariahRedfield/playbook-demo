@@ -1,8 +1,28 @@
 import { collectFindings } from '../engine/collect-findings.js';
 import { printNextSteps } from '../lib/output.js';
 
-export function runPlan() {
+export function runPlan({ json = false } = {}) {
   const findings = collectFindings();
+
+  if (json) {
+    console.log(
+      JSON.stringify(
+        {
+          count: findings.length,
+          plan: findings.map((finding, index) => ({
+            step: index + 1,
+            id: finding.id,
+            title: finding.title,
+            explain: finding.explain
+          }))
+        },
+        null,
+        2
+      )
+    );
+    return;
+  }
+
   if (findings.length === 0) {
     console.log('Plan is empty. No remediations needed.');
     return;

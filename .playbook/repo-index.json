@@ -1,0 +1,28 @@
+{
+  "generatedAt": "deterministic-demo",
+  "modules": [
+    {
+      "name": "users",
+      "path": "src/features/users",
+      "files": [
+        "user-service.ts"
+      ]
+    },
+    {
+      "name": "workouts",
+      "path": "src/features/workouts",
+      "files": [
+        "workout-service.ts",
+        "workout-types.ts"
+      ]
+    }
+  ],
+  "docs": [
+    "ARCHITECTURE.md",
+    "ARCHITECTURE_DIAGRAMS.md",
+    "CHANGELOG.md",
+    "PLAYBOOK_CHECKLIST.md",
+    "PLAYBOOK_NOTES.md",
+    "PLAYBOOK_PRODUCT_ROADMAP.md"
+  ]
+}

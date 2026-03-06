@@ -1,0 +1,16 @@
+{
+  "target": "architecture",
+  "summary": "The demo repository is organized around feature modules under src/features and process docs under docs/.",
+  "modules": [
+    "users",
+    "workouts"
+  ],
+  "docs": [
+    "ARCHITECTURE.md",
+    "ARCHITECTURE_DIAGRAMS.md",
+    "CHANGELOG.md",
+    "PLAYBOOK_CHECKLIST.md",
+    "PLAYBOOK_NOTES.md",
+    "PLAYBOOK_PRODUCT_ROADMAP.md"
+  ]
+}

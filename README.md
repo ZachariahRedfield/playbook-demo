@@ -1,32 +1,39 @@
 # Playbook Demo Repository
 
-A deliberately small repository with **intentional, safe findings** so you can experience the full Playbook discipline in under 30 seconds.
+A deliberately small repository with **intentional, safe findings** so you can experience the full Playbook discipline quickly.
 
-## 30-Second Guided Workflow
+## 30-Second First Run
 
-Run these commands in order:
+Run this exact sequence on a fresh clone:
 
 ```bash
 npm install
 npx playbook status
+npx playbook verify
 npx playbook explain
 npx playbook fix
 npx playbook verify
 ```
 
-> The first `verify` before `fix` is expected to fail in this demo.
+Expected behavior:
+- The first `verify` fails (findings still exist).
+- After `fix`, `verify` passes.
 
-## Supported Demo Commands
+## Command Model (What each command means)
 
-- `npx playbook status` — issue-oriented health summary and active findings.
-- `npx playbook analyze` — structure-oriented repository profile (features, docs, scenarios, command flow).
+- `npx playbook analyze` — **repository shape**: features, docs, scenario presence, and guided command model.
+- `npx playbook status` — **repository discipline**: active rule findings and health summary.
+- `npx playbook verify` — **repository discipline gate**: fails with nonzero exit while findings remain; passes when clean.
 - `npx playbook explain` — why each active finding matters.
 - `npx playbook fix` — apply safe remediations for active findings.
-- `npx playbook verify` — exit nonzero while findings remain; pass when clean.
+
+In short:
+- `analyze` = **what is here and how it is organized**
+- `status` / `verify` = **what discipline rules are currently failing**
 
 ## Expected Initial State
 
-On a fresh clone, the demo reports exactly **5 findings**. This is intentional and part of the guided-imperfection narrative.
+On a fresh clone, the demo reports exactly **5 findings**:
 
 - `[PB001]` Documentation drift in architecture docs
 - `[PB002]` Missing changelog entry for users feature
@@ -34,20 +41,18 @@ On a fresh clone, the demo reports exactly **5 findings**. This is intentional a
 - `[PB004]` Structural inconsistency in workout type naming
 - `[PB005]` Missing expected notes artifact marker
 
-After `npx playbook fix`, `npx playbook verify` should pass.
+These findings are intentional and power the guided demo narrative.
 
-## Why `analyze` and `status` are different
+## Optional Exploration (after first run)
 
-- `analyze` answers: **what shape is this repository?**
-- `status` answers: **what discipline rules are currently failing?**
+```bash
+npx playbook analyze
+npx playbook status
+npx playbook explain
+```
 
-Keeping these concepts separate mirrors Playbook's product architecture: structure understanding is distinct from rule verification.
+Use this pass to compare structure awareness (`analyze`) versus discipline enforcement (`status`/`verify`).
 
-## Demo Narrative
+## Scenario Reference
 
-1. `status` reports repository health and surfaces the 5 expected findings.
-2. `explain` clarifies each finding's purpose in team workflow discipline.
-3. `fix` applies only small, safe updates to docs and source naming.
-4. `verify` confirms the discipline loop is complete.
-
-See `.playbook/demo-scenarios.md` for a finding-by-finding scenario map.
+See `.playbook/demo-scenarios.md` for a finding-by-finding scenario map and maintainer alignment note.

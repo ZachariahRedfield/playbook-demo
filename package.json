@@ -1,23 +1,23 @@
 {
-  "name": "@zachariahredfield/playbook",
+  "name": "playbook-demo",
   "version": "1.0.0",
-  "description": "Tiny demo repo for Playbook analyze + CI",
+  "description": "Self-hosted Playbook demo repository with guided imperfections",
   "type": "module",
   "bin": {
     "playbook": "./dist/cli.js"
   },
   "files": [
     "dist/**",
-    "README.md"
+    "README.md",
+    "docs/**",
+    ".playbook/**"
   ],
   "scripts": {
     "build": "mkdir -p dist && cp src/cli.js dist/cli.js && chmod +x dist/cli.js",
-    "prepare": "pnpm -w build 2>/dev/null || npm run build",
-    "prepack": "npm run build",
-    "verify:pack-bin": "npm pack --dry-run | tee .npm-pack-dry-run.txt && grep -q 'dist/cli.js' .npm-pack-dry-run.txt",
-    "analyze": "npx --yes @zachariahredfield/playbook@latest analyze",
-    "analyze:ci": "npx --yes @zachariahredfield/playbook@latest analyze --ci",
-    "analyze:json": "npx --yes @zachariahredfield/playbook@latest analyze --json",
-    "verify:ci": "npx --yes @zachariahredfield/playbook@latest verify --ci"
+    "prepare": "npm run build",
+    "status": "node dist/cli.js status",
+    "explain": "node dist/cli.js explain",
+    "fix": "node dist/cli.js fix",
+    "verify": "node dist/cli.js verify"
   }
 }

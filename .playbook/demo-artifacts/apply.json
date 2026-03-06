@@ -1,0 +1,25 @@
+{
+  "appliedCount": 5,
+  "applied": [
+    {
+      "id": "PB001",
+      "title": "Documentation drift in architecture docs"
+    },
+    {
+      "id": "PB002",
+      "title": "Missing changelog entry for users feature"
+    },
+    {
+      "id": "PB003",
+      "title": "Checklist drift: apply step is missing"
+    },
+    {
+      "id": "PB004",
+      "title": "Structural inconsistency in workout type naming"
+    },
+    {
+      "id": "PB005",
+      "title": "Missing expected notes artifact marker"
+    }
+  ]
+}

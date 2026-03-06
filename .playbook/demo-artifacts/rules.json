@@ -1,0 +1,32 @@
+[
+  {
+    "id": "PB001",
+    "title": "Documentation drift in architecture docs",
+    "severity": "medium",
+    "explain": "ARCHITECTURE.md should list both workouts and users in its Features section so docs match the current repository structure."
+  },
+  {
+    "id": "PB002",
+    "title": "Missing changelog entry for users feature",
+    "severity": "low",
+    "explain": "CHANGELOG.md should include a users feature note so recent changes are traceable."
+  },
+  {
+    "id": "PB003",
+    "title": "Checklist drift: apply step is missing",
+    "severity": "medium",
+    "explain": "The checklist must include Apply to complete the verify → plan → apply remediation loop."
+  },
+  {
+    "id": "PB004",
+    "title": "Structural inconsistency in workout type naming",
+    "severity": "medium",
+    "explain": "Workout services use WorkoutPlan as the canonical exported domain type. Consistent type naming keeps feature contracts predictable."
+  },
+  {
+    "id": "PB005",
+    "title": "Missing expected notes artifact marker",
+    "severity": "low",
+    "explain": "PLAYBOOK_NOTES.md should include a Last Verified marker so maintenance state is explicit."
+  }
+]

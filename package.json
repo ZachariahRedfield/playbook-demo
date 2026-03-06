@@ -18,6 +18,8 @@
     "plan": "node dist/cli.js plan",
     "apply": "node dist/cli.js apply",
     "verify": "node dist/cli.js verify",
-    "test": "node --test"
+    "test": "node --test",
+    "demo:refresh": "npm run build && node scripts/refresh-demo-artifacts.mjs",
+    "demo:verify": "node dist/cli.js verify --json"
   }
 }

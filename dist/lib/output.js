@@ -11,5 +11,5 @@ export function printNextSteps(steps) {
 }
 
 export function printUsage() {
-  console.log('Usage: playbook <analyze|verify|plan|apply|doctor|diagram|rules>');
+  console.log('Usage: playbook <analyze|index|explain|verify|plan|apply|doctor|diagram|rules>');
 }

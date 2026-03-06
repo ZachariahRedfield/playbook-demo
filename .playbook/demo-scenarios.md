@@ -2,11 +2,11 @@
 
 This repository intentionally starts with 5 findings so users can experience the discipline flow:
 
-`status` → `explain` → `fix` → `verify`
+`verify` → `plan` → `apply` → `verify`
 
 A first `verify` is expected to fail before fixes are applied.
 
-`analyze` is intentionally separate from that flow: it reports repository structure, while `status`/`verify` report rule discipline health.
+`analyze` is intentionally separate from that flow: it reports repository structure, while `verify` reports rule discipline health.
 
 ## Finding Map
 
@@ -22,11 +22,11 @@ A first `verify` is expected to fail before fixes are applied.
 - **Purpose:** Demonstrates release-traceability discipline.
 - **Why high-signal:** If features are not logged, teams lose deployment context quickly.
 
-### PB003 — Checklist drift: verify step is missing
+### PB003 — Checklist drift: apply step is missing
 
-- **Scenario:** `docs/PLAYBOOK_CHECKLIST.md` stops at Fix and omits Verify.
+- **Scenario:** `docs/PLAYBOOK_CHECKLIST.md` stops at Plan and omits Apply.
 - **Purpose:** Reinforces the full quality loop as process, not just detection.
-- **Why high-signal:** A missing verify step normalizes unfinished work.
+- **Why high-signal:** A missing apply step blocks closure of deterministic remediation.
 
 ### PB004 — Structural inconsistency in workout type naming
 
@@ -42,11 +42,12 @@ A first `verify` is expected to fail before fixes are applied.
 
 ## Command Sequence Used in Every Guided Run
 
-1. `npx playbook status`
-2. `npx playbook explain`
-3. `npx playbook fix`
-4. `npx playbook verify`
+1. `npx playbook analyze`
+2. `npx playbook verify`
+3. `npx playbook plan`
+4. `npx playbook apply`
+5. `npx playbook verify`
 
 ## Maintainer Alignment Note
 
-When Playbook command terminology or product framing changes in the main project, revalidate this demo's `README`, this scenario map, and command wording in CLI output so structure (`analyze`) versus discipline (`status`/`verify`) stays explicit and consistent.
+When Playbook command terminology or product framing changes in the main project, revalidate this demo's `README`, this scenario map, and command wording in CLI output so structure (`analyze`) versus discipline (`verify`) stays explicit and consistent.

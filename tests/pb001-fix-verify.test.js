@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 
 function writeTempFile(root, relativePath, contents) {
   const filePath = path.join(root, relativePath);
@@ -18,10 +18,16 @@ function copyCliSource(tempRoot) {
 }
 
 function runCli(root, command) {
-  return execFileSync('node', ['src/cli.js', command], {
+  const result = spawnSync('node', ['src/cli.js', command], {
     cwd: root,
     encoding: 'utf8'
   });
+
+  return {
+    status: result.status,
+    stdout: result.stdout,
+    stderr: result.stderr
+  };
 }
 
 test('PB001 fix and verify share the same architecture feature detection', () => {
@@ -35,28 +41,32 @@ test('PB001 fix and verify share the same architecture feature detection', () =>
   );
 
   writeTempFile(tempRoot, 'docs/CHANGELOG.md', '- Added user profile retrieval service\n');
-  writeTempFile(tempRoot, 'docs/PLAYBOOK_CHECKLIST.md', '## Verify\n- [ ] Run `npx playbook verify`\n');
+  writeTempFile(tempRoot, 'docs/PLAYBOOK_CHECKLIST.md', '## Plan\n- [ ] Run `npx playbook plan`\n');
   writeTempFile(tempRoot, 'docs/PLAYBOOK_NOTES.md', 'Last Verified: yesterday\n');
   writeTempFile(tempRoot, 'src/features/workouts/workout-types.ts', 'export type WorkoutPlan = { id: string };\n');
   writeTempFile(tempRoot, 'src/features/workouts/workout-service.ts', 'export function list(): WorkoutPlan[] { return []; }\n');
 
-  const statusOutput = runCli(tempRoot, 'status');
-  assert.match(statusOutput, /\[PB001\]/, 'status should report PB001 before fix');
+  const verifyOutputBeforeApply = runCli(tempRoot, 'verify');
+  assert.equal(verifyOutputBeforeApply.status, 1, 'verify should fail before apply');
+  assert.match(verifyOutputBeforeApply.stderr, /\[PB001\]/, 'verify should report PB001 before apply');
 
-  runCli(tempRoot, 'fix');
+  const applyOutput = runCli(tempRoot, 'apply');
+  assert.equal(applyOutput.status, 0, 'apply should succeed');
 
   const architectureDoc = fs.readFileSync(path.join(tempRoot, 'docs/ARCHITECTURE.md'), 'utf8');
   assert.match(architectureDoc, /^## Features\n\n- workouts\n- users\n/m, 'fix should add users to features section');
 
-  const verifyOutput = runCli(tempRoot, 'verify');
-  assert.match(verifyOutput, /Verification passed\./, 'verify should pass after fix');
+  const verifyOutputAfterApply = runCli(tempRoot, 'verify');
+  assert.equal(verifyOutputAfterApply.status, 0, 'verify should pass after apply');
+  assert.match(verifyOutputAfterApply.stdout, /Verification passed\./, 'verify should pass after apply');
 });
 
-test('analyze reports repository profile instead of findings list', () => {
+test('analyze reports repository profile instead of verification findings list', () => {
   const output = runCli(process.cwd(), 'analyze');
 
-  assert.match(output, /Playbook Repository Analysis/);
-  assert.match(output, /Features detected:/);
-  assert.match(output, /Repository profile/);
-  assert.doesNotMatch(output, /Detected issues:/, 'analyze should differ from status output');
+  assert.equal(output.status, 0, 'analyze should succeed');
+  assert.match(output.stdout, /Playbook Repository Analysis/);
+  assert.match(output.stdout, /Features detected:/);
+  assert.match(output.stdout, /Repository profile/);
+  assert.doesNotMatch(output.stdout, /Remaining issues:/, 'analyze should differ from verify output');
 });

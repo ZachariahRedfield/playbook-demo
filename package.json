@@ -15,9 +15,8 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "prepare": "npm run build",
-    "status": "node dist/cli.js status",
-    "explain": "node dist/cli.js explain",
-    "fix": "node dist/cli.js fix",
+    "plan": "node dist/cli.js plan",
+    "apply": "node dist/cli.js apply",
     "verify": "node dist/cli.js verify",
     "test": "node --test"
   }

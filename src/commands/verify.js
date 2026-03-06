@@ -5,14 +5,17 @@ export function runVerify() {
   const findings = collectFindings();
   if (findings.length > 0) {
     console.error(`Verification failed. Remaining issues: ${findings.length}`);
+    findings.forEach((finding) => {
+      console.error(`- [${finding.id}] (${finding.severity}) ${finding.title}`);
+    });
     printNextSteps([
-      { title: 'Inspect unresolved findings', command: 'npx playbook status' },
-      { title: 'Understand each finding', command: 'npx playbook explain' },
-      { title: 'Apply safe fixes', command: 'npx playbook fix' }
+      { title: 'Preview deterministic remediations', command: 'npx playbook plan' },
+      { title: 'Apply safe fixes', command: 'npx playbook apply' },
+      { title: 'Re-run verification', command: 'npx playbook verify' }
     ]);
     process.exit(1);
   }
 
   console.log('Verification passed. Repository health is good.');
-  printNextSteps([{ title: 'Review current status', command: 'npx playbook status' }]);
+  printNextSteps([{ title: 'Inspect architecture shape', command: 'npx playbook analyze' }]);
 }

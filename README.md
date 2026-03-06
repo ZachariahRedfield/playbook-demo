@@ -1,27 +1,41 @@
 # Playbook Demo Repository
 
-A deliberately small repository with **intentional, safe findings** so you can experience the full Playbook discipline quickly.
+A deliberately small repository with **intentional, safe findings** so you can experience the full Playbook workflow in under a minute.
 
 ## 30-Second First Run
 
 Run this exact sequence on a fresh clone:
 
 ```bash
+git clone https://github.com/ZachariahRedfield/playbook-demo
+cd playbook-demo
 npm install
 npx playbook analyze
 npx playbook verify
-npx playbook explain
-npx playbook fix
+npx playbook plan
+npx playbook apply
 npx playbook verify
 ```
 
 Expected behavior:
 - The first `verify` fails (findings still exist).
-- After `fix`, `verify` passes.
+- `plan` shows deterministic remediation steps.
+- `apply` resolves the issues.
+- The final `verify` passes.
+
+## Expected Demo Lifecycle
+
+Initial state
+↓
+`analyze` → architecture insights
+`verify` → rule violations
+`plan` → proposed remediation
+`apply` → automatic remediation
+`verify` → clean state
 
 ## What Playbook Looks Like
 
-Before fix:
+Before `apply`:
 
 ❌ PB001 Documentation drift  
 ❌ PB002 Missing changelog entry  
@@ -29,21 +43,24 @@ Before fix:
 ❌ PB004 Structural naming issue  
 ❌ PB005 Missing notes marker
 
-After fix:
+After `apply`:
 
-✅ Repository discipline verified  
+✅ Repository discipline verified
 
-## Command Model (What each command means)
+## Command Model
 
-- `npx playbook analyze` — **repository shape**: features, docs, scenario presence, and guided command model.
-- `npx playbook status` — **repository discipline**: active rule findings and health summary.
-- `npx playbook verify` — **repository discipline gate**: fails with nonzero exit while findings remain; passes when clean.
-- `npx playbook explain` — why each active finding matters.
-- `npx playbook fix` — apply safe remediations for active findings.
+Core guided flow:
 
-In short:
-- `analyze` = **what is here and how it is organized**
-- `status` / `verify` = **what discipline rules are currently failing**
+- `npx playbook analyze` — structure-aware architecture signal.
+- `npx playbook verify` — discipline gate; exits nonzero while findings exist.
+- `npx playbook plan` — deterministic remediation plan for active findings.
+- `npx playbook apply` — applies safe fixes for active findings.
+
+Additional discovery commands:
+
+- `npx playbook doctor` — verifies demo prerequisites are present.
+- `npx playbook diagram` — prints a lightweight architecture tree.
+- `npx playbook rules` — lists all active demo rules.
 
 ## Expected Initial State
 
@@ -51,21 +68,11 @@ On a fresh clone, the demo reports exactly **5 findings**:
 
 - `[PB001]` Documentation drift in architecture docs
 - `[PB002]` Missing changelog entry for users feature
-- `[PB003]` Checklist drift: verify step is missing
+- `[PB003]` Checklist drift: apply step is missing
 - `[PB004]` Structural inconsistency in workout type naming
 - `[PB005]` Missing expected notes artifact marker
 
 These findings are intentional and power the guided demo narrative.
-
-## Optional Exploration (after first run)
-
-```bash
-npx playbook analyze
-npx playbook status
-npx playbook explain
-```
-
-Use this pass to compare structure awareness (`analyze`) versus discipline enforcement (`status`/`verify`).
 
 ## Demo Repository Structure
 
@@ -80,8 +87,7 @@ Playbook enforces discipline across these artifacts.
 
 ## Why the Demo Contains Findings
 
-This repository intentionally contains a small number of realistic
-repository discipline issues.
+This repository intentionally contains a small number of realistic repository discipline issues.
 
 These simulate common problems that appear as repositories evolve:
 
@@ -105,20 +111,7 @@ PB003
 PB004
 PB005
 
-If rules change in Playbook, this demo must be updated so the
-guided run remains stable.
-
-## What This Demonstrates
-
-Playbook is built around a simple principle:
-
-Repositories should evolve with discipline.
-
-Instead of relying on manual review or tribal knowledge,
-Playbook makes repository health **verifiable, explainable,
-and fixable**.
-
-The demo shows that workflow end-to-end.
+If command surface or rule behavior changes in Playbook, this demo must be updated so the guided run remains stable and educational.
 
 ## Scenario Reference
 

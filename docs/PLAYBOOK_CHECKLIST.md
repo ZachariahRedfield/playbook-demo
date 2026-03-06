@@ -2,11 +2,11 @@
 
 This checklist is intentionally incomplete in the initial demo state so Playbook can demonstrate checklist drift detection.
 
-## Detect
-- [x] Run `npx playbook status`
+## Analyze
+- [x] Run `npx playbook analyze`
 
-## Explain
-- [x] Run `npx playbook explain`
+## Verify
+- [x] Run `npx playbook verify`
 
-## Fix
-- [ ] Run `npx playbook fix`
+## Plan
+- [x] Run `npx playbook plan`

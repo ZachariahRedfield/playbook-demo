@@ -3,29 +3,54 @@
 import fs from 'node:fs';
 
 const [, , command] = process.argv;
+const ARCHITECTURE_DOC_PATH = 'docs/ARCHITECTURE.md';
+
+function architectureHasFeature(featureName) {
+  const architectureDoc = readFile(ARCHITECTURE_DOC_PATH);
+  const featurePattern = new RegExp(`^\\s*-\\s+${escapeRegExp(featureName)}\\s*$`, 'm');
+  return featurePattern.test(architectureDoc);
+}
+
+function addArchitectureFeature(featureName) {
+  const architectureDoc = readFile(ARCHITECTURE_DOC_PATH);
+  if (architectureHasFeature(featureName)) {
+    return;
+  }
+
+  const featurePattern = /^## Features\s*\n([\s\S]*?)(?:\n##\s|$)/m;
+  const featureMatch = architectureDoc.match(featurePattern);
+
+  if (featureMatch) {
+    const sectionContent = featureMatch[1];
+    const bulletPattern = new RegExp(`^\\s*-\\s+${escapeRegExp(featureName)}\\s*$`, 'm');
+    if (bulletPattern.test(sectionContent)) {
+      return;
+    }
+
+    const sectionStart = featureMatch.index;
+    const sectionText = featureMatch[0];
+    const sectionEnd = sectionStart + sectionText.length;
+    const beforeSection = architectureDoc.slice(0, sectionEnd).replace(/\s*$/, '');
+    const afterSection = architectureDoc.slice(sectionEnd);
+    const updatedDoc = `${beforeSection}\n- ${featureName}\n${afterSection}`;
+    writeFile(ARCHITECTURE_DOC_PATH, updatedDoc);
+    return;
+  }
+
+  const separator = architectureDoc.endsWith('\n') ? '' : '\n';
+  const updatedDoc = `${architectureDoc}${separator}\n## Features\n\n- workouts\n- ${featureName}\n`;
+  writeFile(ARCHITECTURE_DOC_PATH, updatedDoc);
+}
 
 const RULES = [
   {
     id: 'PB001',
     title: 'Documentation drift in architecture docs',
     severity: 'medium',
-    check: () => {
-      const text = readFile('docs/ARCHITECTURE.md');
-      return text.includes('src/features/users');
-    },
+    check: () => architectureHasFeature('users'),
     explain:
       'ARCHITECTURE.md should mention the users feature so docs match the current repository structure.',
-    fix: () => {
-      const path = 'docs/ARCHITECTURE.md';
-      const text = readFile(path);
-      if (!text.includes('src/features/users')) {
-        const updated = text.replace(
-          '- `src/features/workouts/*` contains workout domain logic.\n',
-          '- `src/features/workouts/*` contains workout domain logic.\n- `src/features/users/*` contains user profile domain logic.\n'
-        );
-        writeFile(path, updated);
-      }
-    }
+    fix: () => addArchitectureFeature('users')
   },
   {
     id: 'PB002',
@@ -106,6 +131,10 @@ function readFile(path) {
 
 function writeFile(path, contents) {
   fs.writeFileSync(path, contents);
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function collectFindings() {

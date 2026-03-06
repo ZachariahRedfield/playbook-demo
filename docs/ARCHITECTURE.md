@@ -2,7 +2,7 @@
 
 This repository is intentionally small so Playbook can reason about it quickly.
 
-It is also intentionally initialized with a few safe discipline gaps for demo purposes. Those gaps are expected on first run and are resolved by `npx playbook fix`.
+It is also intentionally initialized with a few safe discipline gaps for demo purposes. Those gaps are expected on first run and are resolved by `npx playbook apply`.
 
 ## Source layout
 

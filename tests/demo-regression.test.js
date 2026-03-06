@@ -26,44 +26,47 @@ function runCli(root, command) {
   };
 }
 
-test('fresh demo status reports exactly 5 findings', () => {
+test('fresh demo verify reports exactly 5 findings', () => {
   const root = copyDemoFixture();
-  const result = runCli(root, 'status');
+  const result = runCli(root, 'verify');
 
-  assert.equal(result.status, 0, 'status should succeed on fresh demo');
-  assert.match(result.stdout, /Detected issues: 5/);
-  assert.equal((result.stdout.match(/- \[PB\d{3}\]/g) ?? []).length, 5);
+  assert.equal(result.status, 1, 'verify should fail on fresh demo');
+  assert.match(result.stderr, /Verification failed\. Remaining issues: 5/);
+  assert.equal((result.stderr.match(/- \[PB\d{3}\]/g) ?? []).length, 5);
 });
 
-test('analyze output is structurally distinct from status output', () => {
+test('analyze output is structurally distinct from verify output', () => {
   const root = copyDemoFixture();
   const analyzeResult = runCli(root, 'analyze');
-  const statusResult = runCli(root, 'status');
+  const verifyResult = runCli(root, 'verify');
 
   assert.equal(analyzeResult.status, 0);
-  assert.equal(statusResult.status, 0);
+  assert.equal(verifyResult.status, 1);
 
   assert.match(analyzeResult.stdout, /Playbook Repository Analysis/);
   assert.match(analyzeResult.stdout, /Repository profile/);
-  assert.doesNotMatch(analyzeResult.stdout, /Detected issues:/);
+  assert.doesNotMatch(analyzeResult.stdout, /Remaining issues:/);
 
-  assert.match(statusResult.stdout, /Playbook Repository Status/);
-  assert.match(statusResult.stdout, /Detected issues:/);
-  assert.doesNotMatch(statusResult.stdout, /Repository profile/);
+  assert.match(verifyResult.stderr, /Verification failed\. Remaining issues:/);
+  assert.doesNotMatch(verifyResult.stderr, /Repository profile/);
 });
 
-test('verify fails before fix and passes after fix', () => {
+test('verify fails before apply and passes after apply', () => {
   const root = copyDemoFixture();
 
-  const verifyBeforeFix = runCli(root, 'verify');
-  assert.equal(verifyBeforeFix.status, 1, 'verify should fail before fix on fresh demo state');
-  assert.match(verifyBeforeFix.stderr, /Verification failed\. Remaining issues: 5/);
+  const verifyBeforeApply = runCli(root, 'verify');
+  assert.equal(verifyBeforeApply.status, 1, 'verify should fail before apply on fresh demo state');
+  assert.match(verifyBeforeApply.stderr, /Verification failed\. Remaining issues: 5/);
 
-  const fixResult = runCli(root, 'fix');
-  assert.equal(fixResult.status, 0, 'fix should run successfully');
-  assert.match(fixResult.stdout, /Applied 5 safe fix\(es\)\./);
+  const planResult = runCli(root, 'plan');
+  assert.equal(planResult.status, 0, 'plan should run successfully');
+  assert.match(planResult.stdout, /Playbook Remediation Plan/);
 
-  const verifyAfterFix = runCli(root, 'verify');
-  assert.equal(verifyAfterFix.status, 0, 'verify should pass after fix');
-  assert.match(verifyAfterFix.stdout, /Verification passed\./);
+  const applyResult = runCli(root, 'apply');
+  assert.equal(applyResult.status, 0, 'apply should run successfully');
+  assert.match(applyResult.stdout, /Applied 5 safe remediation\(s\)\./);
+
+  const verifyAfterApply = runCli(root, 'verify');
+  assert.equal(verifyAfterApply.status, 0, 'verify should pass after apply');
+  assert.match(verifyAfterApply.stdout, /Verification passed\./);
 });

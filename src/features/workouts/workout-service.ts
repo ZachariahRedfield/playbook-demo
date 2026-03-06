@@ -1,11 +1,11 @@
-import type { Workout } from './workout-types';
+import type { WorkoutPlan } from './workout-types';
 
-const featured: Workout = {
+const featured: WorkoutPlan = {
   id: 'wkt-1',
   name: 'Starter Strength',
   durationMinutes: 25
 };
 
-export function getFeaturedWorkout(): Workout {
+export function getFeaturedWorkoutPlan(): WorkoutPlan {
   return featured;
 }

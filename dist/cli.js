@@ -141,6 +141,18 @@ function collectFindings() {
   return RULES.filter((rule) => !rule.check());
 }
 
+function printNextSteps(steps) {
+  console.log('\nNext steps');
+  console.log('────────────────');
+  console.log('');
+
+  steps.forEach((step, index) => {
+    console.log(`${index + 1}. ${step.title}`);
+    console.log(`   ${step.command}`);
+    console.log('');
+  });
+}
+
 function runStatus() {
   const findings = collectFindings();
   const health = findings.length === 0 ? 'healthy' : 'attention-needed';
@@ -157,22 +169,14 @@ function runStatus() {
       console.log(`- [${finding.id}] (${finding.severity}) ${finding.title}`);
     });
 
-    console.log('\nNext steps');
-    console.log('────────────────────────────────');
-    console.log('');
-    console.log('1. Understand the findings');
-    console.log('   npx playbook explain');
-    console.log('');
-    console.log('2. Apply safe automated fixes');
-    console.log('   npx playbook fix');
-    console.log('');
-    console.log('3. Verify the repository is healthy');
-    console.log('   npx playbook verify');
-    console.log('');
-    console.log('Tip: run `npx playbook fix` to repair most issues automatically.');
+    printNextSteps([
+      { title: 'Understand findings', command: 'npx playbook explain' },
+      { title: 'Apply safe fixes', command: 'npx playbook fix' },
+      { title: 'Verify repository health', command: 'npx playbook verify' }
+    ]);
   } else {
     console.log('\nNo issues found. Repository health is strong.');
-    console.log('Recommended next command: npx playbook verify');
+    printNextSteps([{ title: 'Verify repository health', command: 'npx playbook verify' }]);
   }
 }
 
@@ -189,6 +193,11 @@ function runExplain() {
     console.log(`Why this matters: ${finding.explain}`);
     console.log('');
   });
+
+  printNextSteps([
+    { title: 'Apply safe fixes', command: 'npx playbook fix' },
+    { title: 'Verify repository health', command: 'npx playbook verify' }
+  ]);
 }
 
 function runFix() {
@@ -200,17 +209,28 @@ function runFix() {
 
   findings.forEach((finding) => finding.fix());
   console.log(`Applied ${findings.length} safe fix(es).`);
-  console.log('Next command: npx playbook verify');
+
+  printNextSteps([
+    { title: 'Verify repository health', command: 'npx playbook verify' },
+    { title: 'Review current status', command: 'npx playbook status' }
+  ]);
 }
 
 function runVerify() {
   const findings = collectFindings();
   if (findings.length > 0) {
     console.error(`Verification failed. Remaining issues: ${findings.length}`);
+    printNextSteps([
+      { title: 'Inspect unresolved findings', command: 'npx playbook status' },
+      { title: 'Understand each finding', command: 'npx playbook explain' },
+      { title: 'Apply safe fixes', command: 'npx playbook fix' }
+    ]);
     process.exit(1);
   }
 
   console.log('Verification passed. Repository health is good.');
+
+  printNextSteps([{ title: 'Review current status', command: 'npx playbook status' }]);
 }
 
 switch (command) {

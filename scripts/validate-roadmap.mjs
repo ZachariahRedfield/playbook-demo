@@ -22,6 +22,7 @@ const requiredKeys = [
   'tests',
   'docs',
   'dependencies',
+  'package_ownership',
   'verification_commands',
   'status'
 ];
@@ -42,6 +43,10 @@ for (const feature of roadmap.features) {
 
   if (!Array.isArray(feature.verification_commands) || feature.verification_commands.length === 0) {
     throw new Error(`Feature ${feature.feature_id} must include verification_commands.`);
+  }
+
+  if (typeof feature.package_ownership !== 'object' || feature.package_ownership === null || Array.isArray(feature.package_ownership)) {
+    throw new Error(`Feature ${feature.feature_id} must include package_ownership as an object.`);
   }
 
   if (!['planned', 'in_progress', 'completed'].includes(feature.status)) {

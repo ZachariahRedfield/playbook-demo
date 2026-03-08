@@ -42,3 +42,13 @@ The checked-in source intentionally stays in the imperfect initial state so the 
 ## Maintainer note
 
 If Playbook command contracts change, update the CLI + `scripts/refresh-demo-artifacts.mjs` and rerun `npm run demo:refresh` so documentation and artifacts stay aligned.
+
+## Deterministic delivery checks
+
+```bash
+npm run validate:roadmap
+npm run validate:delivery
+npm run ci:determinism
+```
+
+Roadmap contract entries live in `docs/roadmap/ROADMAP.json`, and command contracts live in `docs/contracts/COMMAND_CONTRACTS_V1.md`.

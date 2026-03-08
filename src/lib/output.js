@@ -10,6 +10,15 @@ export function printNextSteps(steps) {
   });
 }
 
-export function printUsage() {
-  console.log('Usage: playbook <analyze|index|explain|verify|plan|apply|doctor|diagram|rules>');
+export function printUsage(commands = []) {
+  console.log('Usage: playbook <command> [options]');
+
+  if (commands.length === 0) {
+    return;
+  }
+
+  console.log('\nCommands (deterministic order):');
+  commands.forEach((entry) => {
+    console.log(`- ${entry.command.padEnd(7)} ${entry.description}`);
+  });
 }

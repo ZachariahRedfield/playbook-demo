@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  verify:
+  deterministic-delivery:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,28 +18,20 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Clear npm auth for public GitHub install
-        run: |
-          rm -f ~/.npmrc
-          npm config delete //registry.npmjs.org/:_authToken || true
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Install Playbook CLI from GitHub
-        run: npm i --no-save github:ZachariahRedfield/playbook#main
+      - name: Validate roadmap contract
+        run: npm run validate:roadmap
 
-      - name: Playbook verify in CI mode
-        run: npx playbook verify --ci
+      - name: Build and test
+        run: npm run build && npm test
 
-      - name: Run Playbook analyze in CI mode
-        run: npx playbook analyze --ci
+      - name: Validate deterministic delivery linkage
+        run: npm run validate:delivery
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
 
-      - name: Generate Playbook JSON report
-        run: npx playbook analyze --json > playbook-report.json
-
-      - name: Validate package tarball contains CLI bin target
-        run: npm run verify:pack-bin
-
-      - name: Upload Playbook report artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: playbook-report
-          path: playbook-report.json
+      - name: Verify JSON contract
+        run: node dist/cli.js verify --json

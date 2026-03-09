@@ -77,7 +77,7 @@ PLAYBOOK_CLI_PATH=/absolute/path/to/playbook/packages/cli/dist/main.js npm run d
 
 This regenerates:
 
-- `.playbook/repo-index.json`
+- `.playbook/repo-index.json` (main Playbook-compatible `RepositoryIndex` contract fields: `schemaVersion`, `framework`, `language`, `architecture`, `modules`, `database`, `rules`)
 - `.playbook/demo-artifacts/*.json`
 - `.playbook/demo-artifacts/doctor.txt`
 - `docs/ARCHITECTURE_DIAGRAMS.md`

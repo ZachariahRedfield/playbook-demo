@@ -1,21 +1,31 @@
 import path from 'node:path';
 import { listDirectories, listFiles, writeJsonFile } from '../lib/files.js';
 
+function createModuleEntry(feature) {
+  const moduleRoot = path.join('src/features', feature);
+  return {
+    id: feature,
+    name: feature,
+    kind: 'feature-module',
+    path: moduleRoot,
+    files: listFiles(moduleRoot)
+  };
+}
+
 export function createRepoIndex() {
-  const features = listDirectories('src/features');
-  const modules = features.map((feature) => {
-    const moduleRoot = path.join('src/features', feature);
-    return {
-      name: feature,
-      path: moduleRoot,
-      files: listFiles(moduleRoot)
-    };
-  });
+  const modules = listDirectories('src/features').map(createModuleEntry);
+  const docs = listFiles('docs').filter((file) => file.endsWith('.md')).sort();
 
   return {
+    schemaVersion: '1.0',
     generatedAt: 'deterministic-demo',
+    repository: {
+      root: '.',
+      moduleRoot: 'src/features',
+      docsRoot: 'docs'
+    },
     modules,
-    docs: listFiles('docs').filter((file) => file.endsWith('.md')).sort()
+    docs
   };
 }
 

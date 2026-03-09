@@ -51,6 +51,24 @@ test('analyze output is structurally distinct from verify output', () => {
   assert.doesNotMatch(verifyResult.stderr, /Repository profile/);
 });
 
+
+
+test('index writes schemaVersion 1.0 repo index with expected modules', () => {
+  const root = copyDemoFixture();
+  const indexResult = runCli(root, 'index');
+
+  assert.equal(indexResult.status, 0, 'index should run successfully');
+
+  const repoIndexPath = path.join(root, '.playbook/repo-index.json');
+  const repoIndex = JSON.parse(fs.readFileSync(repoIndexPath, 'utf8'));
+
+  assert.equal(repoIndex.schemaVersion, '1.0');
+  assert.deepEqual(
+    repoIndex.modules.map((module) => module.name),
+    ['users', 'workouts']
+  );
+});
+
 test('verify fails before apply and passes after apply', () => {
   const root = copyDemoFixture();
 

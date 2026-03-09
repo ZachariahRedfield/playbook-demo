@@ -8,7 +8,7 @@
 
 ## index-contract
 
-- `index --json` emits deterministic module/doc lists from repository state.
+- `index --json` emits deterministic repository intelligence with `schemaVersion: "1.0"` and module/doc inventories from repository state.
 - Output is persisted to `.playbook/repo-index.json`.
 
 ## verify-contract

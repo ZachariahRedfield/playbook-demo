@@ -2,32 +2,13 @@ import { createRepoIndex } from './index.js';
 import { readFile, pathExists } from '../lib/files.js';
 import { RULES } from '../rules/index.js';
 
-function normalizeRepoIndexShape(repoIndex) {
-  if (repoIndex?.schemaVersion === '1.0' && Array.isArray(repoIndex.modules)) {
-    return repoIndex;
-  }
-
-  return {
-    schemaVersion: '1.0',
-    generatedAt: repoIndex?.generatedAt ?? 'deterministic-demo',
-    repository: repoIndex?.repository ?? { root: '.', moduleRoot: 'src/features', docsRoot: 'docs' },
-    modules: Array.isArray(repoIndex?.modules)
-      ? repoIndex.modules.map((module) => ({
-          id: module.id ?? module.name,
-          name: module.name ?? module.id,
-          kind: module.kind ?? 'feature-module',
-          path: module.path,
-          files: module.files ?? []
-        }))
-      : [],
-    docs: Array.isArray(repoIndex?.docs) ? repoIndex.docs : []
-  };
-}
-
 function explainArchitecture(repoIndex) {
   return {
     target: 'architecture',
     summary: 'The demo repository is organized around feature modules under src/features and process docs under docs/.',
+    framework: repoIndex.framework,
+    language: repoIndex.language,
+    architecture: repoIndex.architecture,
     modules: repoIndex.modules.map((module) => module.name),
     docs: repoIndex.docs
   };
@@ -67,7 +48,7 @@ function loadRepoIndex() {
     return createRepoIndex();
   }
 
-  return normalizeRepoIndexShape(JSON.parse(readFile('.playbook/repo-index.json')));
+  return JSON.parse(readFile('.playbook/repo-index.json'));
 }
 
 export function runExplain({ target, json = false } = {}) {

@@ -105,3 +105,30 @@ test('refresh script honors PLAYBOOK_CLI_PATH override and only updates allowed 
     assert.equal(allowed, true, `unexpected changed path: ${changedPath}`);
   }
 });
+
+
+test('dist fallback index emits main-compatible repository index shape', () => {
+  const fixtureRoot = copyRefreshFixture();
+  const result = spawnSync('node', ['dist/cli.js', 'index', '--json'], {
+    cwd: fixtureRoot,
+    encoding: 'utf8'
+  });
+
+  assert.equal(result.status, 0, `index failed:
+${result.stdout}
+${result.stderr}`);
+
+  const repoIndex = JSON.parse(fs.readFileSync(path.join(fixtureRoot, '.playbook/repo-index.json'), 'utf8'));
+
+  assert.equal(repoIndex.schemaVersion, '1.0');
+  assert.equal(typeof repoIndex.framework, 'string');
+  assert.equal(typeof repoIndex.language, 'string');
+  assert.equal(typeof repoIndex.architecture, 'object');
+  assert.equal(Array.isArray(repoIndex.modules), true);
+  assert.equal(typeof repoIndex.database, 'object');
+  assert.equal(Array.isArray(repoIndex.rules), true);
+  assert.deepEqual(
+    repoIndex.modules.map((module) => module.name),
+    ['users', 'workouts']
+  );
+});

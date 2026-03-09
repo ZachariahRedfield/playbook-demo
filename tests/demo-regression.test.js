@@ -53,7 +53,7 @@ test('analyze output is structurally distinct from verify output', () => {
 
 
 
-test('index writes schemaVersion 1.0 repo index with expected modules', () => {
+test('index writes main-compatible schemaVersion 1.0 repo index with expected modules', () => {
   const root = copyDemoFixture();
   const indexResult = runCli(root, 'index');
 
@@ -63,6 +63,12 @@ test('index writes schemaVersion 1.0 repo index with expected modules', () => {
   const repoIndex = JSON.parse(fs.readFileSync(repoIndexPath, 'utf8'));
 
   assert.equal(repoIndex.schemaVersion, '1.0');
+  assert.equal(typeof repoIndex.framework, 'string');
+  assert.equal(typeof repoIndex.language, 'string');
+  assert.equal(typeof repoIndex.architecture, 'object');
+  assert.equal(Array.isArray(repoIndex.modules), true);
+  assert.equal(typeof repoIndex.database, 'object');
+  assert.equal(Array.isArray(repoIndex.rules), true);
   assert.deepEqual(
     repoIndex.modules.map((module) => module.name),
     ['users', 'workouts']

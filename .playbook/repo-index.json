@@ -1,5 +1,43 @@
 {
   "schemaVersion": "1.0",
+  "framework": "node",
+  "language": "typescript",
+  "architecture": {
+    "style": "feature-modules",
+    "moduleRoot": "src/features",
+    "docsRoot": "docs"
+  },
+  "database": {
+    "engine": "none",
+    "status": "not-configured"
+  },
+  "rules": [
+    {
+      "id": "PB001",
+      "severity": "medium",
+      "title": "Documentation drift in architecture docs"
+    },
+    {
+      "id": "PB002",
+      "severity": "low",
+      "title": "Missing changelog entry for users feature"
+    },
+    {
+      "id": "PB003",
+      "severity": "medium",
+      "title": "Checklist drift: apply step is missing"
+    },
+    {
+      "id": "PB004",
+      "severity": "medium",
+      "title": "Structural inconsistency in workout type naming"
+    },
+    {
+      "id": "PB005",
+      "severity": "low",
+      "title": "Missing expected notes artifact marker"
+    }
+  ],
   "generatedAt": "deterministic-demo",
   "repository": {
     "root": ".",

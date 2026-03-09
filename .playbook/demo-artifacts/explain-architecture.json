@@ -1,6 +1,13 @@
 {
   "target": "architecture",
   "summary": "The demo repository is organized around feature modules under src/features and process docs under docs/.",
+  "framework": "node",
+  "language": "typescript",
+  "architecture": {
+    "style": "feature-modules",
+    "moduleRoot": "src/features",
+    "docsRoot": "docs"
+  },
   "modules": [
     "users",
     "workouts"

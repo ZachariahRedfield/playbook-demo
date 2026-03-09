@@ -10,8 +10,22 @@ const ALLOWED_CHANGED_PATHS = ['.playbook/demo-artifacts', '.playbook/repo-index
 
 function copyRefreshFixture() {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'playbook-demo-refresh-'));
-  for (const entry of ['src', 'docs', '.playbook', 'scripts', 'dist']) {
-    fs.cpSync(path.join(process.cwd(), entry), path.join(tempRoot, entry), { recursive: true });
+  for (const entry of [
+    'src',
+    'docs',
+    '.playbook',
+    'scripts',
+    'dist',
+    'package.json',
+    'package-lock.json',
+    'tsconfig.json',
+    'README.md'
+  ]) {
+    const sourcePath = path.join(process.cwd(), entry);
+    if (!fs.existsSync(sourcePath)) {
+      continue;
+    }
+    fs.cpSync(sourcePath, path.join(tempRoot, entry), { recursive: true });
   }
   return tempRoot;
 }

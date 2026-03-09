@@ -2,6 +2,28 @@ import { createRepoIndex } from './index.js';
 import { readFile, pathExists } from '../lib/files.js';
 import { RULES } from '../rules/index.js';
 
+function normalizeRepoIndexShape(repoIndex) {
+  if (repoIndex?.schemaVersion === '1.0' && Array.isArray(repoIndex.modules)) {
+    return repoIndex;
+  }
+
+  return {
+    schemaVersion: '1.0',
+    generatedAt: repoIndex?.generatedAt ?? 'deterministic-demo',
+    repository: repoIndex?.repository ?? { root: '.', moduleRoot: 'src/features', docsRoot: 'docs' },
+    modules: Array.isArray(repoIndex?.modules)
+      ? repoIndex.modules.map((module) => ({
+          id: module.id ?? module.name,
+          name: module.name ?? module.id,
+          kind: module.kind ?? 'feature-module',
+          path: module.path,
+          files: module.files ?? []
+        }))
+      : [],
+    docs: Array.isArray(repoIndex?.docs) ? repoIndex.docs : []
+  };
+}
+
 function explainArchitecture(repoIndex) {
   return {
     target: 'architecture',
@@ -45,7 +67,7 @@ function loadRepoIndex() {
     return createRepoIndex();
   }
 
-  return JSON.parse(readFile('.playbook/repo-index.json'));
+  return normalizeRepoIndexShape(JSON.parse(readFile('.playbook/repo-index.json')));
 }
 
 export function runExplain({ target, json = false } = {}) {

@@ -1,15 +1,25 @@
 {
+  "schemaVersion": "1.0",
   "generatedAt": "deterministic-demo",
+  "repository": {
+    "root": ".",
+    "moduleRoot": "src/features",
+    "docsRoot": "docs"
+  },
   "modules": [
     {
+      "id": "users",
       "name": "users",
+      "kind": "feature-module",
       "path": "src/features/users",
       "files": [
         "user-service.ts"
       ]
     },
     {
+      "id": "workouts",
       "name": "workouts",
+      "kind": "feature-module",
       "path": "src/features/workouts",
       "files": [
         "workout-service.ts",

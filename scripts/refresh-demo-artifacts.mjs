@@ -13,11 +13,23 @@ function main() {
   mkdirSync(ARTIFACT_DIR, { recursive: true });
 
   const tempRoot = mkdtempSync(path.join(os.tmpdir(), 'playbook-demo-artifacts-'));
-  const fixturePaths = ['src', 'docs', '.playbook'];
+  const fixturePaths = [
+    'src',
+    'docs',
+    '.playbook',
+    'package.json',
+    'package-lock.json',
+    'tsconfig.json',
+    'README.md'
+  ];
 
   try {
     for (const fixturePath of fixturePaths) {
-      cpSync(path.join(ROOT, fixturePath), path.join(tempRoot, fixturePath), { recursive: true });
+      const sourcePath = path.join(ROOT, fixturePath);
+      if (!existsSync(sourcePath)) {
+        continue;
+      }
+      cpSync(sourcePath, path.join(tempRoot, fixturePath), { recursive: true });
     }
 
     runAndWrite(tempRoot, ['index', '--json'], '.playbook/demo-artifacts/index.json');

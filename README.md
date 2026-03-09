@@ -4,7 +4,7 @@ Playbook is the deterministic repo runtime and trust layer for humans and AI age
 
 ## Quick demo (canonical ladder)
 
-This is the primary public walkthrough for this demo using the published package `@fawxzzy/playbook`.
+Public consumer walkthrough (when the published package is available):
 
 ```bash
 npm install
@@ -30,6 +30,8 @@ npx @fawxzzy/playbook doctor
 ```
 
 Canonical ladder: **bootstrap -> index/query/explain -> verify -> plan -> apply -> verify**. Playbook also supports `analyze` in broader workflows, but this demo keeps the ladder above as the primary path.
+
+If the public package is unavailable in your environment, use the maintainer/source-built path below.
 
 ## What this demo proves
 

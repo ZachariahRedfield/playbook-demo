@@ -65,12 +65,22 @@ Under the maintainer flow, refresh generated artifacts via the local CLI/scripts
 npm run demo:refresh
 ```
 
+To drive refresh from an external Playbook CLI build (for example a main `playbook` repository checkout), inject the CLI entrypoint with `PLAYBOOK_CLI_PATH`:
+
+```bash
+PLAYBOOK_CLI_PATH=/absolute/path/to/playbook/packages/cli/dist/main.js npm run demo:refresh
+```
+
+`PLAYBOOK_CLI_PATH` is executed as `node <cli-path> ...args`. If it is unset, refresh falls back to this repo's local `dist/cli.js`.
+
 This regenerates:
 
 - `.playbook/repo-index.json`
 - `.playbook/demo-artifacts/*.json`
 - `.playbook/demo-artifacts/doctor.txt`
 - `docs/ARCHITECTURE_DIAGRAMS.md`
+
+Refresh intentionally copies back only generated artifacts/docs. The checked-in `src/**` and `tests/**` baseline remains intentionally imperfect so the walkthrough starts from a deterministic initial findings state.
 
 ## Deterministic delivery checks
 

@@ -15,6 +15,7 @@ function main() {
   const tempRoot = mkdtempSync(path.join(os.tmpdir(), 'playbook-demo-artifacts-'));
   const fixturePaths = [
     'src',
+    'tests',
     'docs',
     '.playbook',
     'package.json',

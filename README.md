@@ -42,7 +42,7 @@ If the public package is unavailable in your environment, use the maintainer/sou
 
 ## Expected initial state
 
-On a fresh clone, `verify --json` reports exactly **5 findings** (PB001–PB005).
+On a fresh clone, `verify --json` reports exactly **4 active findings** (PB002–PB005). `PB001` remains a guided rule in the demo, but managed-doc regeneration now keeps that governance item satisfied in the checked-in baseline.
 
 The checked-in source intentionally remains in the imperfect initial state so the walkthrough is repeatable. A remediation pass resolves the findings, and a final `verify --json` passes.
 

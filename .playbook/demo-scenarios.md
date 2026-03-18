@@ -1,6 +1,6 @@
 # Playbook Demo Scenarios
 
-This repository intentionally starts with 5 findings so users can experience the discipline flow:
+This repository intentionally starts with 4 active findings so users can experience the discipline flow:
 
 `verify` → `plan` → `apply` → `verify`
 
@@ -15,6 +15,7 @@ A first `verify` is expected to fail before fixes are applied.
 - **Scenario:** `docs/ARCHITECTURE.md` has a `## Features` section but omits `users` even though `src/features/users` exists.
 - **Purpose:** Demonstrates that architecture docs should reflect real repository structure.
 - **Why high-signal:** Missing feature documentation creates onboarding and ownership confusion.
+- **Current baseline note:** This rule remains part of the guided demo and can still be reproduced in targeted fixtures, but managed-doc regeneration now keeps PB001 satisfied in the checked-in baseline so fresh walkthroughs begin with PB002–PB005.
 
 ### PB002 — Missing changelog entry for users feature
 

@@ -65,3 +65,12 @@ test('malformed JSON fails with deterministic message', () => {
     /Expected machine-readable JSON output on stdout when --json is requested/,
   );
 });
+
+
+test('doctor success is enforced by process exit status for non-json commands', () => {
+  const output = run(process.cwd(), ['doctor'], {
+    spawn: createSpawnResult({ status: 0, stdout: 'Playbook Doctor\n' })
+  });
+
+  assert.equal(output, 'Playbook Doctor\n');
+});

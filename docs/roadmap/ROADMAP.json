@@ -112,20 +112,24 @@
         "docs/contracts/ARTIFACT_EVOLUTION_POLICY.md"
       ],
       "tests": [
-        "tests/refresh-demo-artifacts.test.js"
+        "tests/refresh-demo-artifacts.test.js",
+        "tests/refresh-demo-artifacts-json.test.js"
       ],
       "docs": [
-        "README.md"
+        "README.md",
+        "docs/CHANGELOG.md",
+        "docs/ARCHITECTURE.md"
       ],
       "dependencies": [
         "PB-V03-INDEX-001",
         "PB-V04-PLAN-APPLY-001"
       ],
       "verification_commands": [
+        "node scripts/demo-refresh.mjs --dry-run --feature-id \"PB-V1-DEMO-REFRESH-001\"",
         "npm run demo:refresh",
-        "PLAYBOOK_CLI_PATH=/absolute/path/to/playbook/packages/cli/dist/main.js npm run demo:refresh"
+        "node dist/cli.js doctor"
       ],
-      "status": "in_progress"
+      "status": "completed"
     }
   ]
 }

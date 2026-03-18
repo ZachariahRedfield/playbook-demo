@@ -51,7 +51,7 @@ The checked-in source intentionally remains in the imperfect initial state so th
 This repository also includes a self-hosted demo CLI path for maintainers and branch-accurate artifact refresh. It is not the primary public consumer walkthrough.
 
 ```bash
-npm run build
+node scripts/demo-refresh.mjs --dry-run --feature-id "PB-V1-DEMO-REFRESH-001"
 npm run demo:refresh
 npm run validate:roadmap
 npm run validate:delivery
@@ -75,13 +75,14 @@ PLAYBOOK_CLI_PATH=/absolute/path/to/playbook/packages/cli/dist/main.js npm run d
 
 `PLAYBOOK_CLI_PATH` is executed as `node <cli-path> ...args`. If it is unset, refresh falls back to this repo's local `dist/cli.js`.
 
-For machine-readable Playbook commands (`--json`), refresh evaluates success using both structured fields (`ok: true` and `exitCode: 0`) and process exit status (`0`). Warning findings remain advisory output and do not fail artifact refresh.
+For machine-readable Playbook commands (`--json`), refresh evaluates success using both structured fields (`ok: true` and `exitCode: 0`) and process exit status (`0`). Warning findings remain advisory output and do not fail artifact refresh. The refresh pipeline now regenerates managed docs/contracts before running `playbook doctor`, keeping doctor strict at the correct boundary.
 
 This regenerates:
 
 - `.playbook/repo-index.json` (main Playbook-compatible `RepositoryIndex` contract fields: `schemaVersion`, `framework`, `language`, `architecture`, `modules`, `database`, `rules`)
 - `.playbook/demo-artifacts/*.json`
 - `.playbook/demo-artifacts/doctor.txt`
+- `docs/contracts/command-truth.json`
 - `docs/ARCHITECTURE_DIAGRAMS.md`
 
 Refresh intentionally copies back only generated artifacts/docs. The checked-in `src/**` and `tests/**` baseline remains intentionally imperfect so the walkthrough starts from a deterministic initial findings state.

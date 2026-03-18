@@ -6,7 +6,22 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 
-const ALLOWED_CHANGED_PATHS = ['.playbook/demo-artifacts', '.playbook/repo-index.json', 'docs/ARCHITECTURE_DIAGRAMS.md'];
+const ALLOWED_CHANGED_PATHS = [
+  '.playbook/demo-artifacts',
+  '.playbook/repo-index.json',
+  'docs/ARCHITECTURE_DIAGRAMS.md',
+  'docs/ARCHITECTURE.md',
+  'docs/contracts/command-truth.json',
+  'AGENTS.md',
+  'docs/archive/README.md',
+  'docs/commands/README.md',
+  'docs/CONSUMER_INTEGRATION_CONTRACT.md',
+  'docs/index.md',
+  'docs/PLAYBOOK_BUSINESS_STRATEGY.md',
+  'docs/roadmap/IMPROVEMENTS_BACKLOG.md',
+  'docs/roadmap/README.md',
+  'packages/cli/README.md'
+];
 
 function copyRefreshFixture() {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'playbook-demo-refresh-'));
@@ -106,6 +121,33 @@ test('refresh script honors PLAYBOOK_CLI_PATH override and only updates allowed 
   }
 });
 
+test('refresh regenerates managed docs before doctor so stale docs do not fail dry-run', () => {
+  const fixtureRoot = copyRefreshFixture();
+  fs.writeFileSync(path.join(fixtureRoot, 'docs/ARCHITECTURE.md'), '# Architecture\n\nUse `npx playbook apply`.\n');
+  fs.rmSync(path.join(fixtureRoot, 'docs/contracts/command-truth.json'), { force: true });
+
+  const result = spawnSync('node', ['scripts/refresh-demo-artifacts.mjs', '--dry-run'], {
+    cwd: fixtureRoot,
+    encoding: 'utf8'
+  });
+
+  assert.equal(result.status, 0, `dry-run refresh failed:\n${result.stdout}\n${result.stderr}`);
+  assert.match(result.stdout, /Validated demo artifacts/);
+});
+
+test('refresh fails with clear error if managed doc regeneration fails before doctor', () => {
+  const fixtureRoot = copyRefreshFixture();
+  fs.writeFileSync(path.join(fixtureRoot, 'docs/archive'), 'blocking file');
+
+  const result = spawnSync('node', ['scripts/refresh-demo-artifacts.mjs', '--dry-run'], {
+    cwd: fixtureRoot,
+    encoding: 'utf8'
+  });
+
+  assert.notEqual(result.status, 0);
+  assert.match(`${result.stdout}\n${result.stderr}`, /docs\/archive|EEXIST|ENOTDIR/);
+});
+
 
 test('dist fallback index emits main-compatible repository index shape', () => {
   const fixtureRoot = copyRefreshFixture();
@@ -114,9 +156,7 @@ test('dist fallback index emits main-compatible repository index shape', () => {
     encoding: 'utf8'
   });
 
-  assert.equal(result.status, 0, `index failed:
-${result.stdout}
-${result.stderr}`);
+  assert.equal(result.status, 0, `index failed:\n${result.stdout}\n${result.stderr}`);
 
   const repoIndex = JSON.parse(fs.readFileSync(path.join(fixtureRoot, '.playbook/repo-index.json'), 'utf8'));
 

@@ -3,4 +3,16 @@ Playbook Doctor
 ✅ docs directory present
 ✅ src/features directory present
 ✅ demo scenario map present
+✅ managed command truth present
+✅ AGENTS.md contains required anchors
+✅ docs/archive/README.md contains required anchors
+✅ docs/commands/README.md contains required anchors
+✅ docs/CONSUMER_INTEGRATION_CONTRACT.md contains required anchors
+✅ docs/index.md contains required anchors
+✅ docs/PLAYBOOK_BUSINESS_STRATEGY.md contains required anchors
+✅ docs/roadmap/IMPROVEMENTS_BACKLOG.md contains required anchors
+✅ docs/roadmap/README.md contains required anchors
+✅ packages/cli/README.md contains required anchors
+✅ active docs avoid unscoped npx playbook examples
+✅ command truth contract is valid JSON
 ✅ rules loaded

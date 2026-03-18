@@ -3,14 +3,23 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { regenerateManagedDocs, REQUIRED_DOC_ANCHORS, REQUIRED_MANAGED_DOCS } from '../src/lib/demo-governance.js';
 
 const ROOT = process.cwd();
 const ARTIFACT_DIR = path.join(ROOT, '.playbook/demo-artifacts');
 const DEFAULT_CLI_PATH = path.join(ROOT, 'dist/cli.js');
-const ALLOWED_COPYBACK_PATHS = ['.playbook/demo-artifacts', '.playbook/repo-index.json', 'docs/ARCHITECTURE_DIAGRAMS.md'];
+const ALLOWED_COPYBACK_PATHS = [
+  '.playbook/demo-artifacts',
+  '.playbook/repo-index.json',
+  'docs/ARCHITECTURE_DIAGRAMS.md',
+  'docs/ARCHITECTURE.md',
+  ...REQUIRED_MANAGED_DOCS,
+  ...Object.keys(REQUIRED_DOC_ANCHORS)
+];
 const CLI_PATH = resolveCliPath();
 
 function main() {
+  const dryRun = process.argv.includes('--dry-run');
   mkdirSync(ARTIFACT_DIR, { recursive: true });
 
   const tempRoot = mkdtempSync(path.join(os.tmpdir(), 'playbook-demo-artifacts-'));
@@ -45,15 +54,22 @@ function main() {
     runAndWrite(tempRoot, ['apply', '--json'], '.playbook/demo-artifacts/apply.json');
     runAndWrite(tempRoot, ['verify', '--json'], '.playbook/demo-artifacts/verify-after.json');
 
-    run(tempRoot, ['diagram', '--repo', '.', '--out', 'docs/ARCHITECTURE_DIAGRAMS.md']);
-    copyBackFromTemp(tempRoot, 'docs/ARCHITECTURE_DIAGRAMS.md');
+    regenerateManagedDocs(tempRoot);
 
+    run(tempRoot, ['diagram', '--repo', '.', '--out', 'docs/ARCHITECTURE_DIAGRAMS.md']);
     runAndWrite(tempRoot, ['doctor'], '.playbook/demo-artifacts/doctor.txt');
 
-    // Keep an indexed snapshot in the repository root for explain module happy path.
-    copyBackFromTemp(tempRoot, '.playbook/repo-index.json');
+    if (!dryRun) {
+      copyBackFromTemp(tempRoot, 'docs/ARCHITECTURE_DIAGRAMS.md');
+      for (const managedDocPath of ['docs/ARCHITECTURE.md', ...REQUIRED_MANAGED_DOCS, ...Object.keys(REQUIRED_DOC_ANCHORS)]) {
+        copyBackFromTemp(tempRoot, managedDocPath);
+      }
 
-    console.log(`Refreshed demo artifacts in ${ARTIFACT_DIR}`);
+      // Keep an indexed snapshot in the repository root for explain module happy path.
+      copyBackFromTemp(tempRoot, '.playbook/repo-index.json');
+    }
+
+    console.log(`${dryRun ? 'Validated' : 'Refreshed'} demo artifacts in ${ARTIFACT_DIR}`);
   } finally {
     rmSync(tempRoot, { recursive: true, force: true });
   }

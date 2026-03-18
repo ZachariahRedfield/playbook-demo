@@ -76,6 +76,7 @@ PLAYBOOK_CLI_PATH=/absolute/path/to/playbook/packages/cli/dist/main.js npm run d
 `PLAYBOOK_CLI_PATH` is executed as `node <cli-path> ...args`. If it is unset, refresh falls back to this repo's local `dist/cli.js`.
 
 For machine-readable Playbook commands (`--json`), refresh evaluates success using both structured fields (`ok: true` and `exitCode: 0`) and process exit status (`0`). Warning findings remain advisory output and do not fail artifact refresh. The refresh pipeline now regenerates managed docs/contracts before running `playbook doctor`, keeping doctor strict at the correct boundary.
+Refresh now shells through `npm run docs:update`'s underlying script (`node scripts/update-managed-docs.mjs`) before `playbook doctor` and fails early if `docs/contracts/command-truth.json` is still missing, so strict validation only runs after its managed inputs exist.
 
 This regenerates:
 

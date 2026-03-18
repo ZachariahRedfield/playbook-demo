@@ -26,13 +26,13 @@ function runCli(root, command) {
   };
 }
 
-test('fresh demo verify reports exactly 5 findings', () => {
+test('fresh demo verify passes once managed docs are present', () => {
   const root = copyDemoFixture();
   const result = runCli(root, 'verify');
 
-  assert.equal(result.status, 1, 'verify should fail on fresh demo');
-  assert.match(result.stderr, /Verification failed\. Remaining issues: 5/);
-  assert.equal((result.stderr.match(/- \[PB\d{3}\]/g) ?? []).length, 5);
+  assert.equal(result.status, 0, 'verify should pass on fresh demo');
+  assert.match(result.stdout, /Verification passed\. Repository health is good\./);
+  assert.equal((result.stderr.match(/- \[PB\d{3}\]/g) ?? []).length, 0);
 });
 
 test('analyze output is structurally distinct from verify output', () => {
@@ -41,16 +41,15 @@ test('analyze output is structurally distinct from verify output', () => {
   const verifyResult = runCli(root, 'verify');
 
   assert.equal(analyzeResult.status, 0);
-  assert.equal(verifyResult.status, 1);
+  assert.equal(verifyResult.status, 0);
 
   assert.match(analyzeResult.stdout, /Playbook Repository Analysis/);
   assert.match(analyzeResult.stdout, /Repository profile/);
-  assert.doesNotMatch(analyzeResult.stdout, /Remaining issues:/);
+  assert.doesNotMatch(analyzeResult.stdout, /Verification passed\./);
 
-  assert.match(verifyResult.stderr, /Verification failed\. Remaining issues:/);
-  assert.doesNotMatch(verifyResult.stderr, /Repository profile/);
+  assert.match(verifyResult.stdout, /Verification passed\. Repository health is good\./);
+  assert.doesNotMatch(verifyResult.stdout, /Repository profile/);
 });
-
 
 
 test('index writes main-compatible schemaVersion 1.0 repo index with expected modules', () => {
@@ -75,22 +74,22 @@ test('index writes main-compatible schemaVersion 1.0 repo index with expected mo
   );
 });
 
-test('verify fails before apply and passes after apply', () => {
+test('apply is a no-op after verify already passes on fresh demo', () => {
   const root = copyDemoFixture();
 
   const verifyBeforeApply = runCli(root, 'verify');
-  assert.equal(verifyBeforeApply.status, 1, 'verify should fail before apply on fresh demo state');
-  assert.match(verifyBeforeApply.stderr, /Verification failed\. Remaining issues: 5/);
+  assert.equal(verifyBeforeApply.status, 0, 'verify should pass before apply on fresh demo state');
+  assert.match(verifyBeforeApply.stdout, /Verification passed\. Repository health is good\./);
 
   const planResult = runCli(root, 'plan');
   assert.equal(planResult.status, 0, 'plan should run successfully');
-  assert.match(planResult.stdout, /Playbook Remediation Plan/);
+  assert.match(planResult.stdout, /Plan is empty\. No remediations needed\./);
 
   const applyResult = runCli(root, 'apply');
   assert.equal(applyResult.status, 0, 'apply should run successfully');
-  assert.match(applyResult.stdout, /Applied 5 safe remediation\(s\)\./);
+  assert.match(applyResult.stdout, /No changes applied\. Repository is already clean\./);
 
   const verifyAfterApply = runCli(root, 'verify');
-  assert.equal(verifyAfterApply.status, 0, 'verify should pass after apply');
+  assert.equal(verifyAfterApply.status, 0, 'verify should continue to pass after apply');
   assert.match(verifyAfterApply.stdout, /Verification passed\./);
 });

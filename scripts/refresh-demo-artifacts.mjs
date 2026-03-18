@@ -3,11 +3,13 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { regenerateManagedDocs, REQUIRED_DOC_ANCHORS, REQUIRED_MANAGED_DOCS } from '../src/lib/demo-governance.js';
+import { REQUIRED_DOC_ANCHORS, REQUIRED_MANAGED_DOCS } from '../src/lib/demo-governance.js';
 
 const ROOT = process.cwd();
 const ARTIFACT_DIR = path.join(ROOT, '.playbook/demo-artifacts');
 const DEFAULT_CLI_PATH = path.join(ROOT, 'dist/cli.js');
+const MANAGED_DOCS_SCRIPT = path.join(ROOT, 'scripts/update-managed-docs.mjs');
+const REQUIRED_COMMAND_TRUTH_PATH = 'docs/contracts/command-truth.json';
 const ALLOWED_COPYBACK_PATHS = [
   '.playbook/demo-artifacts',
   '.playbook/repo-index.json',
@@ -54,7 +56,8 @@ function main() {
     runAndWrite(tempRoot, ['apply', '--json'], '.playbook/demo-artifacts/apply.json');
     runAndWrite(tempRoot, ['verify', '--json'], '.playbook/demo-artifacts/verify-after.json');
 
-    regenerateManagedDocs(tempRoot);
+    updateManagedDocs(tempRoot);
+    assertManagedDocExists(tempRoot, REQUIRED_COMMAND_TRUTH_PATH);
 
     run(tempRoot, ['diagram', '--repo', '.', '--out', 'docs/ARCHITECTURE_DIAGRAMS.md']);
     runAndWrite(tempRoot, ['doctor'], '.playbook/demo-artifacts/doctor.txt');
@@ -72,6 +75,28 @@ function main() {
     console.log(`${dryRun ? 'Validated' : 'Refreshed'} demo artifacts in ${ARTIFACT_DIR}`);
   } finally {
     rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+function updateManagedDocs(cwd, options = {}) {
+  const { updateScriptPath = MANAGED_DOCS_SCRIPT, spawn = spawnSync } = options;
+  const result = spawn('node', [updateScriptPath], {
+    cwd,
+    encoding: 'utf8',
+    env: { ...process.env, PLAYBOOK_MANAGED_DOCS_ROOT: cwd }
+  });
+  const status = result.status ?? 1;
+  if (status !== 0) {
+    throw new Error(
+      `Managed docs generation failed before doctor.\nprocess exit code: ${status}\nstdout:\n${result.stdout ?? ''}\nstderr:\n${result.stderr ?? ''}`
+    );
+  }
+}
+
+function assertManagedDocExists(rootDir, relativePath) {
+  const absolutePath = path.join(rootDir, relativePath);
+  if (!existsSync(absolutePath)) {
+    throw new Error(`Managed docs generation completed without required artifact: ${relativePath}`);
   }
 }
 
@@ -219,4 +244,4 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   main();
 }
 
-export { run, parseJsonOutput, isJsonCommand, formatOutputSnippet };
+export { run, parseJsonOutput, isJsonCommand, formatOutputSnippet, updateManagedDocs, assertManagedDocExists };

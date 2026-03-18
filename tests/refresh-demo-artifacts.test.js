@@ -135,8 +135,66 @@ test('refresh regenerates managed docs before doctor so stale docs do not fail d
   assert.match(result.stdout, /Validated demo artifacts/);
 });
 
+test('refresh regenerates managed docs before doctor runs when managed docs are absent', () => {
+  const fixtureRoot = copyRefreshFixture();
+  const commandTruthPath = path.join(fixtureRoot, 'docs/contracts/command-truth.json');
+  const markerPath = path.join(os.tmpdir(), `playbook-doctor-order-${process.pid}-${Date.now()}.txt`);
+  const wrapperPath = path.join(fixtureRoot, 'wrapper-cli-order.js');
+
+  for (const managedPath of [
+    'docs/contracts',
+    'docs/archive',
+    'docs/commands',
+    'docs/roadmap/IMPROVEMENTS_BACKLOG.md',
+    'docs/roadmap/README.md',
+    'docs/CONSUMER_INTEGRATION_CONTRACT.md',
+    'docs/index.md',
+    'docs/PLAYBOOK_BUSINESS_STRATEGY.md',
+    'packages/cli/README.md',
+    'AGENTS.md'
+  ]) {
+    fs.rmSync(path.join(fixtureRoot, managedPath), { recursive: true, force: true });
+  }
+
+  fs.writeFileSync(
+    wrapperPath,
+    [
+      "import fs from 'node:fs';",
+      "import { spawnSync } from 'node:child_process';",
+      "import path from 'node:path';",
+      'const cwd = process.cwd();',
+      'const args = process.argv.slice(2);',
+      "if (args[0] === 'doctor') {",
+      "  const commandTruthPath = path.join(cwd, 'docs/contracts/command-truth.json');",
+      '  const exists = fs.existsSync(commandTruthPath);',
+      `  fs.writeFileSync(${JSON.stringify(markerPath)}, \`doctor-sees-command-truth=\${exists}\\n\`);`,
+      '  if (!exists) {',
+      "    console.error('doctor invoked before managed docs were regenerated');",
+      '    process.exit(99);',
+      '  }',
+      '}',
+      `const result = spawnSync('node', [${JSON.stringify(path.join(fixtureRoot, 'dist/cli.js'))}, ...args], { cwd, encoding: 'utf8' });`,
+      "process.stdout.write(result.stdout ?? '');",
+      "process.stderr.write(result.stderr ?? '');",
+      'process.exit(result.status ?? 1);',
+      ''
+    ].join('\n')
+  );
+
+  const result = spawnSync('node', ['scripts/refresh-demo-artifacts.mjs'], {
+    cwd: fixtureRoot,
+    encoding: 'utf8',
+    env: { ...process.env, PLAYBOOK_CLI_PATH: wrapperPath }
+  });
+
+  assert.equal(result.status, 0, `refresh failed:\n${result.stdout}\n${result.stderr}`);
+  assert.equal(fs.existsSync(commandTruthPath), true, 'managed command truth should be regenerated');
+  assert.match(fs.readFileSync(markerPath, 'utf8'), /doctor-sees-command-truth=true/);
+});
+
 test('refresh fails with clear error if managed doc regeneration fails before doctor', () => {
   const fixtureRoot = copyRefreshFixture();
+  fs.rmSync(path.join(fixtureRoot, 'docs/archive'), { recursive: true, force: true });
   fs.writeFileSync(path.join(fixtureRoot, 'docs/archive'), 'blocking file');
 
   const result = spawnSync('node', ['scripts/refresh-demo-artifacts.mjs', '--dry-run'], {
@@ -145,7 +203,7 @@ test('refresh fails with clear error if managed doc regeneration fails before do
   });
 
   assert.notEqual(result.status, 0);
-  assert.match(`${result.stdout}\n${result.stderr}`, /docs\/archive|EEXIST|ENOTDIR/);
+  assert.match(`${result.stdout}\n${result.stderr}`, /Managed docs generation failed before doctor|docs\/archive|EEXIST|ENOTDIR/);
 });
 
 

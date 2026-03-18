@@ -42,7 +42,7 @@ If the public package is unavailable in your environment, use the maintainer/sou
 
 ## Expected initial state
 
-On a fresh clone, `verify --json` reports exactly **5 findings** (PB001–PB005).
+On a fresh clone, `verify --json` reports exactly **4 active findings** (PB002–PB005). `PB001` remains a guided rule in the demo, but managed-doc regeneration now keeps that governance item satisfied in the checked-in baseline.
 
 The checked-in source intentionally remains in the imperfect initial state so the walkthrough is repeatable. A remediation pass resolves the findings, and a final `verify --json` passes.
 
@@ -76,6 +76,7 @@ PLAYBOOK_CLI_PATH=/absolute/path/to/playbook/packages/cli/dist/main.js npm run d
 `PLAYBOOK_CLI_PATH` is executed as `node <cli-path> ...args`. If it is unset, refresh falls back to this repo's local `dist/cli.js`.
 
 For machine-readable Playbook commands (`--json`), refresh evaluates success using both structured fields (`ok: true` and `exitCode: 0`) and process exit status (`0`). Warning findings remain advisory output and do not fail artifact refresh. The refresh pipeline now regenerates managed docs/contracts before running `playbook doctor`, keeping doctor strict at the correct boundary.
+Refresh now shells through `npm run docs:update`'s underlying script (`node scripts/update-managed-docs.mjs`) before `playbook doctor` and fails early if `docs/contracts/command-truth.json` is still missing, so strict validation only runs after its managed inputs exist.
 
 This regenerates:
 
@@ -86,6 +87,7 @@ This regenerates:
 - `docs/ARCHITECTURE_DIAGRAMS.md`
 
 Refresh intentionally copies back only generated artifacts/docs. The checked-in `src/**` and `tests/**` baseline remains intentionally imperfect so the walkthrough starts from a deterministic initial findings state.
+Managed docs regeneration supports strict validation and refresh determinism, but it does not change the demo contract: a fresh checkout still starts with intentional verify findings that are resolved through the verify → plan → apply walkthrough.
 
 ## Deterministic delivery checks
 

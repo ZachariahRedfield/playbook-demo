@@ -1,10 +1,6 @@
 {
-  "appliedCount": 5,
+  "appliedCount": 4,
   "applied": [
-    {
-      "id": "PB001",
-      "title": "Documentation drift in architecture docs"
-    },
     {
       "id": "PB002",
       "title": "Missing changelog entry for users feature"

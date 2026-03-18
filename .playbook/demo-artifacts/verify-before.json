@@ -2,12 +2,6 @@
   "ok": false,
   "findings": [
     {
-      "id": "PB001",
-      "severity": "medium",
-      "title": "Documentation drift in architecture docs",
-      "explain": "ARCHITECTURE.md should list both workouts and users in its Features section so docs match the current repository structure."
-    },
-    {
       "id": "PB002",
       "severity": "low",
       "title": "Missing changelog entry for users feature",

@@ -87,6 +87,7 @@ This regenerates:
 - `docs/ARCHITECTURE_DIAGRAMS.md`
 
 Refresh intentionally copies back only generated artifacts/docs. The checked-in `src/**` and `tests/**` baseline remains intentionally imperfect so the walkthrough starts from a deterministic initial findings state.
+Managed docs regeneration supports strict validation and refresh determinism, but it does not change the demo contract: a fresh checkout still starts with intentional verify findings that are resolved through the verify → plan → apply walkthrough.
 
 ## Deterministic delivery checks
 

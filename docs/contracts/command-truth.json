@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "scripts/refresh-demo-artifacts.mjs",
+  "commands": [
+    "analyze",
+    "index",
+    "explain",
+    "rules",
+    "verify",
+    "plan",
+    "apply",
+    "diagram",
+    "doctor"
+  ]
+}

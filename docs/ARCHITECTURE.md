@@ -2,7 +2,7 @@
 
 This repository is intentionally small so Playbook can reason about it quickly.
 
-It is also intentionally initialized with a few safe discipline gaps for demo purposes. Those gaps are expected on first run and are resolved by `npx playbook apply`.
+It is also intentionally initialized with a few safe discipline gaps for demo purposes. Those gaps are expected on first run and are resolved by `npx @fawxzzy/playbook apply`.
 
 ## Source layout
 
@@ -14,6 +14,8 @@ It is also intentionally initialized with a few safe discipline gaps for demo pu
 ## Features
 
 - workouts
+- users
+
 
 ## Structural conventions used by the demo
 
@@ -24,3 +26,9 @@ It is also intentionally initialized with a few safe discipline gaps for demo pu
 
 - `docs/` holds architecture and process documentation.
 - `.playbook/` stores scenario definitions for the guided demo flow.
+
+## Demo refresh governance
+
+- Failure Mode: Refresh pipelines must not require generated compliance artifacts to already be valid before the generation step that restores them.
+- Pattern: Sequence deterministic regeneration before deterministic validation.
+- Rule: Keep `doctor` strict, but place it after artifact regeneration in refresh/build pipelines.

@@ -19,7 +19,7 @@
     "apply": "node dist/cli.js apply",
     "verify": "node dist/cli.js verify",
     "test": "node --test",
-    "demo:refresh": "npm run build && node scripts/refresh-demo-artifacts.mjs",
+    "demo:refresh": "node scripts/demo-refresh.mjs",
     "demo:verify": "node dist/cli.js verify --json",
     "validate:roadmap": "node scripts/validate-roadmap.mjs",
     "validate:delivery": "node scripts/validate-delivery.mjs",

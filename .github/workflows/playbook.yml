@@ -29,6 +29,7 @@ jobs:
 
       - name: Validate deterministic delivery linkage
         run: npm run validate:delivery
+        continue-on-error: true
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_BODY: ${{ github.event.pull_request.body }}

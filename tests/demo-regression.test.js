@@ -7,14 +7,14 @@ import { spawnSync } from 'node:child_process';
 
 function copyDemoFixture() {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'playbook-demo-'));
-  for (const entry of ['src', 'docs', '.playbook']) {
+  for (const entry of ['src', 'dist', 'docs', '.playbook']) {
     fs.cpSync(path.join(process.cwd(), entry), path.join(tempRoot, entry), { recursive: true });
   }
   return tempRoot;
 }
 
 function runCli(root, ...args) {
-  const result = spawnSync('node', ['src/cli.js', ...args], {
+  const result = spawnSync('node', ['dist/cli.js', ...args], {
     cwd: root,
     encoding: 'utf8'
   });

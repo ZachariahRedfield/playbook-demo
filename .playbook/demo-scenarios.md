@@ -1,10 +1,10 @@
 # Playbook Demo Scenarios
 
-This repository intentionally starts with 4 active findings so users can experience the discipline flow:
+This repository intentionally starts with 4 active findings (`PB002`, `PB003`, `PB004`, and `PB005`) so users can experience the discipline flow:
 
 `verify` → `plan` → `apply` → `verify`
 
-A first `verify` is expected to fail before fixes are applied.
+A first `verify` is expected to fail before fixes are applied, and `verify --json` should return `ok: false` with those same four finding IDs.
 
 `analyze` is intentionally separate from that flow: it reports repository structure, while `verify` reports rule discipline health.
 

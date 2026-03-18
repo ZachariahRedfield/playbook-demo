@@ -98,3 +98,4 @@ npm run ci:determinism
 ```
 
 Roadmap contract entries live in `docs/roadmap/ROADMAP.json`, and command contracts live in `docs/contracts/COMMAND_CONTRACTS_V1.md`.
+`npm run ci:determinism` intentionally validates the fail-first demo contract by checking that fresh `verify --json` fails with PB002–PB005 in a temporary fixture, then confirming `plan`/`apply` lead to a passing `verify --json`.

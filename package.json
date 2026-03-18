@@ -23,7 +23,8 @@
     "demo:verify": "node dist/cli.js verify --json",
     "validate:roadmap": "node scripts/validate-roadmap.mjs",
     "validate:delivery": "node scripts/validate-delivery.mjs",
-    "ci:determinism": "npm run build && npm test && npm run validate:roadmap && npm run validate:delivery && node dist/cli.js verify --json",
-    "docs:update": "node scripts/update-managed-docs.mjs"
+    "ci:determinism": "npm run build && npm test && npm run validate:roadmap && npm run validate:delivery && npm run validate:demo-baseline",
+    "docs:update": "node scripts/update-managed-docs.mjs",
+    "validate:demo-baseline": "node scripts/validate-demo-baseline.mjs"
   }
 }

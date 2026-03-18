@@ -34,5 +34,5 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_BODY: ${{ github.event.pull_request.body }}
 
-      - name: Verify JSON contract
-        run: node dist/cli.js verify --json
+      - name: Validate fail-first demo contract
+        run: npm run validate:demo-baseline

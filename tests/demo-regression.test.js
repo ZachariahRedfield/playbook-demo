@@ -36,7 +36,7 @@ test('fresh demo verify reports the intentionally imperfect baseline', () => {
   assert.match(result.stderr, /Verification failed\. Remaining issues: 4/);
   assert.equal((result.stderr.match(/- \[PB\d{3}\]/g) ?? []).length, BASELINE_FINDING_IDS.length);
   for (const findingId of BASELINE_FINDING_IDS) {
-    assert.match(result.stderr, new RegExp(`\[${findingId}\]`));
+    assert.match(result.stderr, new RegExp(`\\[${findingId}\\]`));
   }
 });
 
@@ -103,7 +103,7 @@ test('fresh demo requires apply before verify passes', () => {
   assert.equal(planResult.status, 0, 'plan should run successfully');
   assert.match(planResult.stdout, /Playbook Remediation Plan/);
   for (const findingId of BASELINE_FINDING_IDS) {
-    assert.match(planResult.stdout, new RegExp(`\[${findingId}\]`));
+    assert.match(planResult.stdout, new RegExp(`\\[${findingId}\\]`));
   }
 
   const applyResult = runCli(root, 'apply');

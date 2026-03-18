@@ -5,6 +5,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 
+const BASELINE_FINDING_IDS = ['PB002', 'PB003', 'PB004', 'PB005'];
+
 function copyDemoFixture() {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'playbook-demo-'));
   for (const entry of ['src', 'dist', 'docs', '.playbook']) {
@@ -32,11 +34,10 @@ test('fresh demo verify reports the intentionally imperfect baseline', () => {
 
   assert.equal(result.status, 1, 'verify should fail on the fresh demo baseline');
   assert.match(result.stderr, /Verification failed\. Remaining issues: 4/);
-  assert.equal((result.stderr.match(/- \[PB\d{3}\]/g) ?? []).length, 4);
-  assert.match(result.stderr, /\[PB002\]/);
-  assert.match(result.stderr, /\[PB003\]/);
-  assert.match(result.stderr, /\[PB004\]/);
-  assert.match(result.stderr, /\[PB005\]/);
+  assert.equal((result.stderr.match(/- \[PB\d{3}\]/g) ?? []).length, BASELINE_FINDING_IDS.length);
+  for (const findingId of BASELINE_FINDING_IDS) {
+    assert.match(result.stderr, new RegExp(`\[${findingId}\]`));
+  }
 });
 
 test('fresh demo verify --json reports the same four baseline findings', () => {
@@ -49,7 +50,7 @@ test('fresh demo verify --json reports the same four baseline findings', () => {
   assert.equal(payload.ok, false);
   assert.deepEqual(
     payload.findings.map((finding) => finding.id),
-    ['PB002', 'PB003', 'PB004', 'PB005']
+    BASELINE_FINDING_IDS
   );
 });
 
@@ -101,14 +102,20 @@ test('fresh demo requires apply before verify passes', () => {
   const planResult = runCli(root, 'plan');
   assert.equal(planResult.status, 0, 'plan should run successfully');
   assert.match(planResult.stdout, /Playbook Remediation Plan/);
-  assert.match(planResult.stdout, /\[PB002\]/);
-  assert.match(planResult.stdout, /\[PB003\]/);
-  assert.match(planResult.stdout, /\[PB004\]/);
-  assert.match(planResult.stdout, /\[PB005\]/);
+  for (const findingId of BASELINE_FINDING_IDS) {
+    assert.match(planResult.stdout, new RegExp(`\[${findingId}\]`));
+  }
 
   const applyResult = runCli(root, 'apply');
   assert.equal(applyResult.status, 0, 'apply should run successfully');
   assert.match(applyResult.stdout, /Applied 4 safe remediation\(s\)\./);
+
+  const verifyAfterApplyJson = runCli(root, 'verify', '--json');
+  assert.equal(verifyAfterApplyJson.status, 0, 'verify --json should pass after apply');
+
+  const afterPayload = JSON.parse(verifyAfterApplyJson.stdout);
+  assert.equal(afterPayload.ok, true);
+  assert.deepEqual(afterPayload.findings, []);
 
   const verifyAfterApply = runCli(root, 'verify');
   assert.equal(verifyAfterApply.status, 0, 'verify should pass after apply');
